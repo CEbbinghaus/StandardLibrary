@@ -73,15 +73,24 @@ namespace CLib {
 		// Array<T>::Iterator<T>
 		//		Iterator to loop Through Array.
 		class Iterator {
-			int index;
-			T* current;
 		public:
-			Iterator(T* ptr) : current(ptr) {};
-			Iterator& operator++() { index++; current = current + 1; return *this; }
+			T& current;
+			int index;
+			Iterator(T* ptr) : current(*ptr) { index = 0; };
+			Iterator& operator++() {
+				index++;
+				
+				unsigned int adress = (unsigned int)(void*)(&current + 1);
+				memcpy(this, &adress, sizeof(adress));
+			
+				return *this; }
 			//Iterator& operator++(int) { index++; current = current + 1; return *this; }
 			bool operator!=(const Iterator& other) const { return other.current != current; }
 			bool operator==(const Iterator& other) const { return other.current == current; }
-			T& operator*() { return *current; }
+			Iterator& operator*() { return *this; }
+			operator T&() {
+				return current;
+			}
 		};
 	public:
 
