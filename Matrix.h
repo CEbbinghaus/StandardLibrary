@@ -1,7 +1,7 @@
 #pragma once
 #include "Array.h"
 
-namespace CLib {
+namespace atyp {
 	template<class T, unsigned ... RestD> struct array;
 
 	template<class T, unsigned PrimaryD >

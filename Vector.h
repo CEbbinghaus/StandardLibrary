@@ -2,7 +2,7 @@
 #include<cmath>
 #include "Array.h"
 
-namespace CLib {
+namespace atyp {
 	enum VectorDimensions {
 		x = 1,
 		y = 2,

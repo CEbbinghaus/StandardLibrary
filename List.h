@@ -22,7 +22,7 @@ empty	empty() –return a Boolean, true if the list is empty, false otherwise
 clear	clear() –remove all elements from the list
 */
 
-namespace CLib {
+namespace atyp {
 
 	template<typename T>
 	class List {
@@ -118,7 +118,8 @@ namespace CLib {
 
 
 				if (!(current->valid))return  * this;
-				unsigned int adress = (unsigned int)((void*)&current->data);
+
+				unsigned int adress = (unsigned int)(&current->data);
 				memcpy(&r, &adress, sizeof(unsigned int));
 
 				r.d_node = current;

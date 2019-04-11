@@ -2,7 +2,7 @@
 #include <iostream>
 #include "Array.h"
 
-namespace CLib {
+namespace atyp {
 	class String : public Array<char>{
 	public: 
 		String() {}

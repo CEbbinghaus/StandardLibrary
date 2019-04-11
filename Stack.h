@@ -1,7 +1,7 @@
 #pragma once
 #include "Array.h"
 
-namespace CLib{
+namespace atyp{
 	template<typename T>
 	class Stack{
 		Array<T> stack;

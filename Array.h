@@ -5,6 +5,7 @@
 #include <assert.h> 
 #include <cstdarg>
 #include "Assert.h"
+
 //class String;
 
 /*
@@ -23,7 +24,7 @@
 */
 
 
-namespace CLib {
+namespace atyp {
 
 	//Array<T>
 	//Dynamic Array of type T
@@ -49,7 +50,6 @@ namespace CLib {
 				if (adr != nullptr)delete[] adr;
 				adr = tmp;
 			}
-			length += amount;
 		}
 
 		//Ensures that the Array is Able to Decrease size
@@ -246,7 +246,7 @@ namespace CLib {
 		//		Returns the Iterator for the last element of the Array
 		//		=used in Range based For loops=
 		Iterator end() {
-			return Iterator(&adr[length]);
+			return Iterator(&adr[length - 1]);
 		}
 
 		//	void Array<T>::empty()
@@ -459,9 +459,8 @@ namespace CLib {
 
 		//	Array<T> Array<T>::concat(Array<T> Data)
 		//		Concatinates Another Array onto the End
-		Array<T> concat(Array<T> data) {
-			increase(data.length);
-			memcpy(adr + (length), data.data(), sizeof(T) * data.length);
+		Array<T>& concat(Array<T> data) {
+			push(data);
 			return *this;
 		}
 
@@ -472,21 +471,24 @@ namespace CLib {
 		//		Pushes an Element onto the Back of an Array
 		void push(T element) {
 			increase();
-			memcpy(adr + (length - 1), &element, sizeof(T));
+			memcpy(adr + (length), &element, sizeof(T));
+			++length;
 		}
 
 		//	void Array<T>::push(std::initializer_list<T> Values)
 		//		adds a initializer list of elements onto the end of the Array
 		void push(std::initializer_list<T> values) {
 			increase((int)values.size());
-			memcpy(adr + (length - values.size()), values.begin(), sizeof(T) * values.size());
+			memcpy(adr + (length), values.begin(), sizeof(T) * values.size());
+			length += (int)values.size();
 		}
 
 		//	void Array<T>::push(Array<T> Values)
 		//		adds another array onto the end. Does the same as .concat
 		void push(Array<T> values) {
 			increase(values.length);
-			memcpy(adr + (length - values.length), values.adr, sizeof(T) * values.length);
+			memcpy(adr + (length), values.adr, sizeof(T) * values.length);
+			length += values.length;
 		}
 		//	void Array<T>::push(T...Args)
 		//		Adds Multiple Arguments on the end of the Array
@@ -503,13 +505,15 @@ namespace CLib {
 		void insert(int index, T element) {
 			moveUp(index);
 			adr[index] = element;
+			++length;
 		}
 
 		//	void Array<T>::insert(int Index, std::Initializer_List<T> Values)
 		//		Inserts a Initializer List of Values into the Array at a given Index
 		void insert(int index, std::initializer_list<T> values) {
-			moveUp(index, values.length);
-			memcpy(adr + index, values.adr, sizeof(T) * values.length);
+			moveUp(index, values.size());
+			memcpy(adr + index, values.begin(), sizeof(T) * values.size());
+			length += values.size();
 		}
 
 		// void Array<T>::insert(int Index, Array<T> Values)
@@ -517,6 +521,7 @@ namespace CLib {
 		void insert(int index, Array<T> values) {
 			moveUp(index, values.length);
 			memcpy(adr + index, values.adr, sizeof(T) * values.length);
+			length += values.length;
 		}
 
 		//	void Array<T>::insert(int Index, T... args)
@@ -534,6 +539,7 @@ namespace CLib {
 		void unshift(T element) {
 			moveUp(0);
 			adr[0] = element;
+			++length;
 		}
 
 		//	void Array<T>::unshift(std::initializer_list<T> Values)
@@ -541,6 +547,7 @@ namespace CLib {
 		void unshift(std::initializer_list<T> values) {
 			moveUp(0, values.size());
 			memcpy(adr, values.begin(), sizeof(T) * values.size());
+			length += values.size();
 		}
 		
 		//	void Array<T>::unshift(Array<T> Values)
@@ -548,6 +555,7 @@ namespace CLib {
 		void unshift(Array<T> values) {
 			moveUp(0, values.length);
 			memcpy(adr, values.adr, sizeof(T) * values.length);
+			length += values.length;
 		}
 
 		//	void Array<T>::unshift(T...Args)

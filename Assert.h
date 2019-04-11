@@ -1,6 +1,6 @@
 #pragma once
 
-namespace CLib {
+namespace atyp {
 	#ifdef _DEBUG
 		#define Assert(expression, string) if(\
 		!!(expression))throw string;
