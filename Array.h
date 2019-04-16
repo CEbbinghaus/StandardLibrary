@@ -46,6 +46,7 @@ namespace atyp {
 			if ((length + amount) > m_size) {
 				m_size = (m_size + amount) * 2;
 				T* tmp = (T*)malloc(sizeof(T) * m_size);
+				if (!tmp)throw "Out of Memory";
 				memcpy(tmp, adr, sizeof(T) * length);
 				if (adr != nullptr)delete[] adr;
 				adr = tmp;
