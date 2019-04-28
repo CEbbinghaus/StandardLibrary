@@ -1,39 +1,202 @@
 #pragma once
 #include <bitset>
+#include <type_traits>
 
 namespace atyp {
-	template<unsigned int amount>
-	static std::bitset<amount> hash(void* data, unsigned int length) {
-		std::bitset<amount> hash = 0;
-		unsigned int salt[] = { 310501, 396547 , 553099 , 270493};
-		unsigned int loops = length < amount ? amount * 5 : length * 3;
+	template<unsigned int bytes>
+	class hash {
+		class modifier {
+			friend hash;
+			hash* _data;
+			unsigned int index;
+			~modifier() {}
+			modifier(hash* data) {
+				_data = data;
+				index = 0;
+			}
+			modifier& operator[](unsigned int a_index) {
+				index = a_index;
+				return *this;
+			}
+		public:
+			modifier& operator = (bool value) {
+				unsigned int x = index / 8;
+				unsigned char y = index % 8;
+				unsigned char& d = _data->_data[x];
+				d = (d ^ (0b1 << y)) | value << y;
+				return *this;
+			}
 
-		unsigned int si = 1;
-		unsigned int di = 1;
-		unsigned int hi = 1;
-		for (unsigned int i = 0; i < loops; i++) {
-			unsigned int sp = si / (sizeof(salt) / sizeof(salt[0]));
-			unsigned int sip = ((si - 1) % (sizeof(salt[0]) * 8));
-
-			bool saltBit = salt[sp] & 0x1 << (sip - 1);
-
-			bool dataBit = ((char*)data)[di / 8] & 0x1 << (di % 7);
-
-			hash[hi] = saltBit ^ dataBit;
-
-			++si; ++di; ++hi;
-
-			hi %= amount - 1;
-			di = ((di - 1) % length) + 1;
-			si %= sizeof(salt) * 8;
+			operator bool() {
+				return _data->_data[index / 8] & (0b1 << (index % 8));
+			}
+		};
+		modifier* _mod;
+		unsigned char* _data;
+	public:
+		hash() {
+			_data = new unsigned char[bytes];
+			for (unsigned int i = 0; i < bytes; i++)
+				_data[i] = 0;
+			_mod = new modifier(this);
+			_mod->index = 0;
 		}
+		~hash() {
+			delete _mod;
+		}
+		bool all() {
+			for (int i = 0; i < bytes; i++) {
+				if (_data[i] ^ 0xFF)return false;
+			}
+			return true;
+		}
+
+		bool any() {
+			for (int i = 0; i < bytes; i++) {
+				if (_data[i])return true;
+			}
+			return false;
+		}
+
+		bool none() {
+			for (int i = 0; i < bytes; i++) {
+				if (_data[i])return false;
+			}
+			return true;
+		}
+
+		unsigned char* data() {
+			return _data;
+		}
+
+		unsigned int bitCount() {
+			unsigned int amount = 0;
+			for (unsigned int i = 0; i < bytes * CHAR_BIT; i++) {
+				amount += (_data[i / 8] & (0b1 << (i % 8))) >> (i % 8);
+			}
+			return amount;
+		}
+
+		modifier& operator[](unsigned int index){
+			return _mod[index];
+		}
+	};
+
+	template<typename T>
+	T BitRotR(T v, unsigned char amount) {
+		//if (!(std::is_integral<T>::value && std::is_unsigned<T>::value))throw "Type Must be a Unsigned Integral";
+		return (v << amount) | ((unsigned)v >> (-amount & (sizeof(T) * CHAR_BIT - 1)));
+	}
+	template<typename T>
+	T BitRotL(T v, unsigned char amount) {
+		//if (!(std::is_integral<T>::value && std::is_unsigned<T>::value))throw "Type Must be a Unsigned Integral";
+		return (v >> amount) | ((unsigned)v << (-amount & (sizeof(T) * CHAR_BIT - 1)));
+	}	
+	template<unsigned int bytes>
+	static std::bitset<bytes * 8> hearsum(const char* data, const unsigned int dLength) {
+		std::bitset<bytes* CHAR_BIT> hash = 0;
+
+		char salt[] = {232, 253, 223};
+
+		char*** snow = new char**[bytes];
+		{
+			unsigned int dataIndex = 0x333334;
+			for (unsigned int x = 0; x < bytes; ++x) {
+				snow[x] = new char* [dLength];
+				for (unsigned int y = 0; y < dLength; ++y) {
+					snow[x][y] = new char[3];
+					for (unsigned int z = 0; z < 3; ++z) {
+						dataIndex %= dLength;
+						snow[x][y][z] = (data[dataIndex] ^ salt[(dataIndex + x) % 3]);
+						++dataIndex;
+					}
+				}
+			}
+		}
+		for (unsigned int x = 0; x < bytes; ++x) {
+			for (unsigned int y = 0; y < dLength; ++y) {
+				for (unsigned int z = 0; z < 3; ++z) {
+					snow[x][y][z] ^= BitRotR(snow[(x + (bytes / 2)) % bytes][(y + (dLength / 2)) % dLength][(z + 2) % 3], 4);
+				}
+			}
+		}
+
+		for (unsigned int x = 0; x < bytes; ++x) {
+			for (unsigned int y = 0; y < dLength; ++y) {
+				for (int z = 2; z >= 0 ; --z) {
+					snow[x][y][z] ^= (BitRotR(snow[x][y][z], 4) + BitRotR(snow[x][y][z + 1], 4));
+				}
+			}
+			for (long long int y = dLength - 1; y >= 0; --y) {
+				//snow[x][y][0] ^= snow[x][y][0] + snow[x][y + 1][0];
+			}
+		}
+		for (unsigned int i = 0; i < bytes * CHAR_BIT; ++i) {
+			unsigned int c = i / CHAR_BIT;
+			unsigned int b = i % CHAR_BIT;
+			hash[i] = (bool)(snow[c][0][0] & (0b1 << b));
+		}
+		for (unsigned int x = 0; x < bytes; ++x) {
+			for (unsigned int y = 0; y < dLength; ++y) {
+				delete[] snow[x][y];
+			}
+			delete[] snow[x];
+		}
+		delete[] snow;
 		return hash;
 	}
 
+	template<unsigned int bytes>
+	static std::bitset<bytes * 8> hakret(const char* data, unsigned int dLength) {
+		std::bitset<bytes * CHAR_BIT> hash = 0;
+		unsigned char salt[] = { 233, 211, 239, 227, 251, 223, 229, 241 };
+		{
+			unsigned int si = 211;
+			unsigned int di = 223;
+			for (unsigned int i = 0; i < (bytes * CHAR_BIT); i++) {
+				si %= (sizeof(salt) * CHAR_BIT);
+				di %= (dLength * CHAR_BIT);
+				hash[i] = hash[i] ^ (((BitRotR(salt[si / 8], i / bytes) ^ BitRotR(data[di / 8], i / bytes)) & (0b1 << si % 8)) >> (si % 8));
+				++si;
+				++di;
+			}
+		}
+		//Initializing Registers and Filling them with Data
+		unsigned int registerCount = (dLength / bytes | bytes);
+		char** registers = new char*[registerCount];
+		{
+			unsigned dIndex = 0;
+			for (unsigned int i = 0; i < registerCount; ++i) {
+				registers[i] = new char[bytes];
+				for (unsigned int j = 0; j < bytes; ++j) {
+					dIndex %= dLength;
+					registers[i][j] = BitRotR(data[dIndex], dIndex % 8) + 1;
+					++dIndex;
+				}
+			}
+		}
 
-	//class Hash {
-	//	Hash(void* data, unsigned int length) {
-	//	
-	//	}
-	//};
+		for (unsigned int d = 0; d < dLength; d++) {
+			for (unsigned int r = 0; r < registerCount; ++r) {
+				for (unsigned int i = 0; i < bytes; i++) {
+					registers[r][i] ^= (BitRotR(registers[r][(i + 5) % bytes], 2) ^ BitRotR(registers[r][(i + 5) % bytes], 4)) ^ (BitRotR(data[d], 4) ^ data[d]);
+				}
+			}
+		}
+
+		char final[bytes] = {0};
+		for (unsigned int j = 0; j < bytes; ++j) {
+			for (unsigned int i = 0; i < registerCount; ++i) {
+				final[j] = BitRotL(final[j], 4) + registers[i][j];
+			}
+			for (int i = 0; i < CHAR_BIT; i++) {
+				hash[j + i] = (final[j] & (0b1 << i));
+			}
+		}
+		for (unsigned int i = 0; i < registerCount; i++) {
+			delete[] registers[i];
+		}
+		delete[] registers;
+		return hash;
+	}
 }

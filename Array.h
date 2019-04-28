@@ -186,6 +186,7 @@ namespace atyp {
 			m_size = length = values.size();
 			adr = (T*)malloc(sizeof(T) * length);
 			memcpy(adr, values.begin(), sizeof(T) * length);
+			return *this;
 		}
 
 		//	Array<T> == Array<T>
