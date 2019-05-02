@@ -1,32 +1,31 @@
 #pragma once
 #include <iostream>
 #include <functional>
-#include <type_traits>
+#include <assert.h>
 
 #define out std::cout
 #define in std::cin
 #define endl std::endl
 
 /*
-unshift	pushFront( value ) –add a new value to the front of the list
-push	pushBack( value ) –add a new value to the end of the list
-insert	insert( index, value ) –add a new value one-past the specified index location
-first	first() –return the first element by value
-last 	last() –return the last element by value
-size	count() –return how many elements exist in the list
-erase	erase( index ) –remove an element by its index
-remove	remove( value ) –remove all elements with matching value
-pop		popBack() –remove the last element
-shift	popFront() –remove the first element
-empty	empty() –return a Boolean, true if the list is empty, false otherwise
-clear	clear() –remove all elements from the list
+unshift	pushFront( value ) ï¿½add a new value to the front of the list
+push	pushBack( value ) ï¿½add a new value to the end of the list
+insert	insert( index, value ) ï¿½add a new value one-past the specified index location
+first	first() ï¿½return the first element by value
+last 	last() ï¿½return the last element by value
+size	count() ï¿½return how many elements exist in the list
+erase	erase( index ) ï¿½remove an element by its index
+remove	remove( value ) ï¿½remove all elements with matching value
+pop		popBack() ï¿½remove the last element
+shift	popFront() ï¿½remove the first element
+empty	empty() ï¿½return a Boolean, true if the list is empty, false otherwise
+clear	clear() ï¿½remove all elements from the list
 */
 
 namespace atyp {
 
 	template<typename T>
 	class List {
-	public:
 		class node {
 		public:
 			bool valid = true;
@@ -143,8 +142,16 @@ namespace atyp {
 		node* m_last;
 
 		void clearData() {
+			/*
 			for (node& e : *this) {
 				delete &e;
+			}
+			*/
+			node* current = m_first->next;
+			while (current != m_last) {
+				node* tmp = current->next;
+				delete current;
+				current = tmp;
 			}
 		}
 
@@ -208,16 +215,17 @@ namespace atyp {
 		}
 
 		void erase(int index) {
-			node* n = (*this)[index];
-			node* prev = n->previous;
-			node* nxt = n->next;
-			*prev >> *nxt;
-			delete n;
+			remove((*this)[index]);
+			//node* n = (*this)[index];
+			//node* prev = n->previous;
+			//node* nxt = n->next;
+			//*prev >> *nxt;
+			//delete n;
 		}
 
 		void remove(T Value) {
 			for (node& a : (*this)) {
-				if (a.value == Value) {
+				if (a.data == Value) {
 					node* prev = a.previous;
 					node* next = a.next;
 					delete &a;
@@ -227,17 +235,19 @@ namespace atyp {
 		}
 
 		T shift() {
-			T& r = m_first->next;
-			//TODO: Return nullobj when next is Last
-			m_first >> r.next;
-			return r;
+			node* r = m_first->next;
+			T tmp = r->data;
+			*m_first >> *r->next;
+			delete r;
+			return tmp;
 		}
 
 		T pop() {
-			T& r = m_last->previous;
-			//TODO: Return nullobj when previous is first
-			r.previous >> m_last;
-			return r;
+			node* r = m_last->previous;
+			T tmp = r->data;
+			*r->previous >> *m_last;
+			delete r;
+			return tmp;
 		}
 
 		T& first(){
@@ -251,11 +261,13 @@ namespace atyp {
 		}
 
 		bool empty() {
-			return m_first->next->next == nullptr;
+			return m_first->next == m_last && m_last->previous == m_first;
 		}
 
 		void clear() {
 			clearData();
+			*m_first >> *m_last;
+			length = 0;
 		}
 
 		int size() {

@@ -78,7 +78,7 @@ namespace atyp {
 		}
 
 		modifier& operator[](unsigned int index){
-			return _mod[index];
+			return (*_mod)[index];
 		}
 	};
 
@@ -98,13 +98,13 @@ namespace atyp {
 
 		char salt[] = {232, 253, 223};
 
-		char*** snow = new char**[bytes];
+		char*** snow = new char**[bytes]; // X = Bytes
 		{
 			unsigned int dataIndex = 0x333334;
 			for (unsigned int x = 0; x < bytes; ++x) {
-				snow[x] = new char* [dLength];
+				snow[x] = new char* [dLength]; // Y = DataLength
 				for (unsigned int y = 0; y < dLength; ++y) {
-					snow[x][y] = new char[3];
+					snow[x][y] = new char[3]; //Z = 3
 					for (unsigned int z = 0; z < 3; ++z) {
 						dataIndex %= dLength;
 						snow[x][y][z] = (data[dataIndex] ^ salt[(dataIndex + x) % 3]);
@@ -123,12 +123,12 @@ namespace atyp {
 
 		for (unsigned int x = 0; x < bytes; ++x) {
 			for (unsigned int y = 0; y < dLength; ++y) {
-				for (int z = 2; z >= 0 ; --z) {
-					snow[x][y][z] ^= (BitRotR(snow[x][y][z], 4) + BitRotR(snow[x][y][z + 1], 4));
+				for (int z = 1; z >= 0 ; --z) {
+					snow[x][y][z] ^= (BitRotR(snow[x][y][z], 4) + BitRotR(snow[x][y][z + 1], 4)) + salt[(x * x) % 3];
 				}
 			}
-			for (long long int y = dLength - 1; y >= 0; --y) {
-				//snow[x][y][0] ^= snow[x][y][0] + snow[x][y + 1][0];
+			for (long long int y = (signed)dLength - 2; y >= 0; --y) {
+				snow[x][y][0] ^= snow[x][y][0] + snow[x][y + 1][0];
 			}
 		}
 		for (unsigned int i = 0; i < bytes * CHAR_BIT; ++i) {
