@@ -36,8 +36,7 @@ namespace atyp {
 	public:
 		hash() {
 			_data = new unsigned char[bytes];
-			for (unsigned int i = 0; i < bytes; i++)
-				_data[i] = 0;
+			memset(_data, 0, bytes);
 			_mod = new modifier(this);
 			_mod->index = 0;
 		}
