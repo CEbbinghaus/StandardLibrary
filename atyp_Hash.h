@@ -57,6 +57,8 @@ namespace atyp {
 		~hash() {
 			if(_mod)
 				delete _mod;
+			if(_data)
+				delete )data;
 		}
 
 		hash<bytes>& operator = (hash<bytes>& other){
@@ -68,6 +70,7 @@ namespace atyp {
 		
 		hash<bytes>& operator = (hash<bytes>&& other){
 			_mod = other._mod;
+			other._mod = nullptr;
 			_data = other._data;
 			other._data = nullptr;
 			return *this;
