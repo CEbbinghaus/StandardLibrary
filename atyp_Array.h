@@ -4,6 +4,7 @@
 #include <functional>
 #include <assert.h> 
 #include <cstdarg>
+#include <assert.h>
 #include "Assert.h"
 
 //class String;

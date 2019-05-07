@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-#include "Array.h"
+//#include "Array.h"
 
 namespace atyp {
 	class String{
@@ -82,11 +82,11 @@ namespace atyp {
 		}
 
 		String& operator +=(char data[]) {
-
+			return *this;
 		}
 
 		String& operator +=(std::string data) {
-		
+			return *this;
 		}
 	};
 

@@ -1,6 +1,7 @@
 #pragma once
 #include <bitset>
 #include <type_traits>
+//#include "String.h"
 
 namespace atyp {
 	template<unsigned int bytes>
@@ -75,6 +76,10 @@ namespace atyp {
 			}
 			return amount;
 		}
+
+		/*atyp::String toBase(unsigned int amount = 16) {
+			_STL_ASSERT(amount >= 2 && amount <= 64, "Invalid Base Amount")
+		}*/
 
 		modifier& operator[](unsigned int index){
 			return (*_mod)[index];
