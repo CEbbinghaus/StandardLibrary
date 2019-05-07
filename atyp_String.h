@@ -1,6 +1,5 @@
 #pragma once
 #include <iostream>
-//#include "Array.h"
 
 namespace atyp {
 	class String{

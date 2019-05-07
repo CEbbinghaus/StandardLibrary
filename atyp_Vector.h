@@ -1,6 +1,6 @@
 #pragma once
 #include<cmath>
-#include "Array.h"
+#include "atyp_Array.h"
 
 namespace atyp {
 	enum VectorDimensions {

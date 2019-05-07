@@ -1,5 +1,5 @@
 #pragma once
-#include "headers\Array.h"
+#include "atyp_Array.h"
 
 namespace atyp {
 	template<typename T>

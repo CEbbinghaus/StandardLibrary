@@ -5,7 +5,7 @@
 #include <assert.h> 
 #include <cstdarg>
 #include <assert.h>
-#include "Assert.h"
+#include "atyp_Assert.h"
 
 //class String;
 
@@ -118,7 +118,7 @@ namespace atyp {
 		//	Array<T>(std::initializer_list<T> values)
 		//		Creates Array 
 		Array(std::initializer_list<T> values) {
-			m_size = length = values.size();
+			m_size = length = (int)values.size();
 			adr = (T*)malloc(sizeof(T) * length);
 			memcpy(adr, values.begin(), sizeof(T) * length);
 		}
@@ -184,7 +184,7 @@ namespace atyp {
 		//		Sets a Array to a Initializer List.
 		Array<T>& operator =(std::initializer_list<T> values) {
 			if (adr != nullptr)delete[]adr;
-			m_size = length = values.size();
+			m_size = (int)length = values.size();
 			adr = (T*)malloc(sizeof(T) * length);
 			memcpy(adr, values.begin(), sizeof(T) * length);
 			return *this;
@@ -516,7 +516,7 @@ namespace atyp {
 		void insert(int index, std::initializer_list<T> values) {
 			moveUp(index, values.size());
 			memcpy(adr + index, values.begin(), sizeof(T) * values.size());
-			length += values.size();
+			length += (int)values.size();
 		}
 
 		// void Array<T>::insert(int Index, Array<T> Values)
@@ -550,7 +550,7 @@ namespace atyp {
 		void unshift(std::initializer_list<T> values) {
 			moveUp(0, values.size());
 			memcpy(adr, values.begin(), sizeof(T) * values.size());
-			length += values.size();
+			length += (int)values.size();
 		}
 		
 		//	void Array<T>::unshift(Array<T> Values)

@@ -1,5 +1,5 @@
 #pragma once
-#include "Array.h"
+#include "atyp_Array.h"
 
 namespace atyp {
 	template<class T, unsigned ... RestD> struct array;

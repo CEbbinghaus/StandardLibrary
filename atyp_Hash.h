@@ -1,7 +1,6 @@
 #pragma once
 #include <bitset>
 #include <type_traits>
-//#include "String.h"
 
 namespace atyp {
 	template<unsigned int bytes>
@@ -15,11 +14,25 @@ namespace atyp {
 				_data = data;
 				index = 0;
 			}
+			
+			modifier(modifier& other) {
+				_data = other._data;
+				index = other.index;
+			}
+			
+			modifier(modifier&& other) {
+				_data = other._data;
+				other._data = nullptr;
+				index = other.index;
+			}
+
+
 			modifier& operator[](unsigned int a_index) {
 				index = a_index;
 				return *this;
 			}
 		public:
+
 			modifier& operator = (bool value) {
 				unsigned int x = index / 8;
 				unsigned char y = index % 8;
@@ -42,8 +55,24 @@ namespace atyp {
 			_mod->index = 0;
 		}
 		~hash() {
-			delete _mod;
+			if(_mod)
+				delete _mod;
 		}
+
+		hash<bytes>& operator = (hash<bytes>& other){
+			_mod = new modifier(other._mod);
+			_data = new char[bytes];
+			memcpy(_data, other._data, bytes);
+			return *this;
+		}
+		
+		hash<bytes>& operator = (hash<bytes>&& other){
+			_mod = other._mod;
+			_data = other._data;
+			other._data = nullptr;
+			return *this;
+		}
+
 		bool all() {
 			for (int i = 0; i < bytes; i++) {
 				if (_data[i] ^ 0xFF)return false;
