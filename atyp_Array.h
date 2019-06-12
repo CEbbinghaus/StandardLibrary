@@ -49,7 +49,7 @@ namespace atyp
 				T* tmp = (T*)malloc(sizeof(T) * m_size);
 				if(!tmp)throw "Out of Memory";
 				memcpy(tmp, adr, sizeof(T) * length);
-				if(adr != nullptr)delete[] adr;
+				if(adr != nullptr)free(adr);
 				adr = tmp;
 			}
 		}
@@ -69,7 +69,8 @@ namespace atyp
 		//Shifts all Elements down to compress the array
 		void moveDown(int begin, int amount = 1){
 			decrease(amount);
-			memcpy(adr + begin, adr + begin + amount, sizeof(T) * length);
+			if(length >= 1 && begin < length)
+				memcpy(adr + begin, adr + begin + amount, sizeof(T) * (length - begin));
 		}
 
 		// Array<T>::Iterator<T>
@@ -142,7 +143,7 @@ namespace atyp
 		//	~Array<T>() 
 		//		Deconstructs the Array
 		~Array(){
-			delete[] adr;
+			free(adr);
 			adr = nullptr;
 		}
 
@@ -162,8 +163,8 @@ namespace atyp
 
 		//	Array<T> = (Array<T>& Original)
 		//		Copy Operator
-		Array<T>& operator =(Array<T>& original){
-			if(adr != nullptr)delete[] adr;
+		Array<T>& operator =(Array<T> original){
+			if(adr != nullptr)free(adr);
 			length = original.length;
 			adr = (T*)malloc(sizeof(T) * length);
 			memcpy(adr, original.data(), sizeof(T) * length);
@@ -173,7 +174,7 @@ namespace atyp
 		//	Array<T> = (Array<T>&& Original)
 		//		RValue Copy Operator
 		Array<T>& operator =(Array<T>&& original){
-			if(adr != nullptr)delete[] adr;
+			if(adr != nullptr)free(adr);
 			adr = (T*)malloc(sizeof(T) * original.length);
 			memcpy(adr, original.data(), sizeof(T) * original.length);
 			m_size = length = original.length;
@@ -183,7 +184,7 @@ namespace atyp
 		//	Array<T> = (std::initializer_list<T> Values)
 		//		Sets a Array to a Initializer List.
 		Array<T>& operator =(std::initializer_list<T> values){
-			if(adr != nullptr)delete[]adr;
+			if(adr != nullptr)free(adr);
 			m_size = (int)length = values.size();
 			adr = (T*)malloc(sizeof(T) * length);
 			memcpy(adr, values.begin(), sizeof(T) * length);
@@ -231,7 +232,7 @@ namespace atyp
 		//	void Array<T>::clear()
 		//		removes all elements from an array
 		void clear(){
-			delete[] adr;
+			free(adr);
 			adr = nullptr;
 			m_size = 0;
 			length = 0;
@@ -252,7 +253,7 @@ namespace atyp
 		Iterator end(){
 			if(!length)
 				return Iterator(nullptr);
-			return Iterator(&adr[length - 1]);
+			return Iterator(&adr[length]);
 		}
 
 		//	void Array<T>::empty()
@@ -614,7 +615,6 @@ namespace atyp
 		for(T& e : data){
 			os << '[' << i++ << ']' << " -> " << e << std::endl;
 		}
-		//data.forEach([&os](T element, int index) {os << element << std::endl; });
 		return os;
 
 	}
