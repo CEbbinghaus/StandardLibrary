@@ -11,13 +11,19 @@ namespace atyp {
 		b = 5,
 		c = 6
 	};
-	template<int a, typename T>
-	struct Vector {
-		Array<T> data;
 
-		Vector() {
-			data = Array<T>(a);
-		}
+	template<int size, typename T = float>
+	struct Vector {
+		union{
+			T data[size];
+			struct{
+				T x;
+				T y;
+				T z;
+			};
+		};
+
+		Vector() {}
 		//T operator[char index]{
 		//}
 		T operator[](int index){
@@ -103,10 +109,8 @@ namespace atyp {
 	};
 
 	template<typename T>
-	struct Vector3 {
-		T x;
-		T y;
-		T z;
+	struct Vector3 : Vector<3, T> {
+		
 	};
 	
 	template<typename T>

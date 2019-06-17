@@ -163,7 +163,7 @@ namespace atyp
 
 		//	Array<T> = (Array<T>& Original)
 		//		Copy Operator
-		Array<T>& operator =(Array<T> original){
+		Array<T>& operator =(Array<T>& original){
 			if(adr != nullptr)free(adr);
 			length = original.length;
 			adr = (T*)malloc(sizeof(T) * length);
