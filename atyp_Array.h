@@ -38,7 +38,6 @@ namespace atyp
 	class Array{
 		T* adr = nullptr;
 		int m_size;
-		T nullobj = 0;
 
 	protected:
 		//Ensures there is always memory to write to. Allocates More memory if Nessecary
@@ -69,7 +68,7 @@ namespace atyp
 		//Shifts all Elements down to compress the array
 		void moveDown(int begin, int amount = 1){
 			decrease(amount);
-			if(length >= 1 && begin < length)
+			if(length >= 1 && begin + amount < length)
 				memcpy(adr + begin, adr + begin + amount, sizeof(T) * (length - begin));
 		}
 
@@ -157,7 +156,7 @@ namespace atyp
 		//		Errors Will Dissapear when Compiling for Release
 		T& operator[] (int i){
 			assert(i < length && length > 0 && i >= 0);
-			if(i >= length)return nullobj;
+			if(i >= length)throw "Trying to Access Data outside the Array";
 			return (adr[i]);
 		}
 
@@ -346,7 +345,7 @@ namespace atyp
 			};
 			auto partition =
 				[&](int min, int max){
-				int pivot = adr[max];
+				T pivot = adr[max];
 				int j = min - 1;
 
 				for(int i = min; i < max; i++){
@@ -375,7 +374,7 @@ namespace atyp
 			unsigned int largest = [this, &getValue]()->unsigned int{
 				unsigned int l = 0;
 				for(T& e : *this){
-					l = e > l ? e : l;
+					l = getValue(e) > l ? getValue(e) : l;
 				}
 				return l;
 			}();
@@ -580,7 +579,7 @@ namespace atyp
 		//		WARNING: If the Array has no Elements it will throw and error and return a reference to a nullptr. CHECK THE ADRESS OF THE RETURNED OBJECT
 		T pop(){
 			assert(length > 0);
-			if(length <= 0)return nullobj;
+			if(length <= 0)throw "Nothing Left to Pop";
 			decrease();
 			return adr[length];
 		}
