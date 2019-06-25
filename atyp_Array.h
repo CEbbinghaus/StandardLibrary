@@ -10,18 +10,18 @@
 //class String;
 
 /*
-	unshift			pushFront( value ) –add a new value to the front of the list
-	push			pushBack( value ) –add a new value to the end of the list
-	insert			insert( index, value ) –add a new value one-past the specified index location
-	first			first() –return the first element by value
-	last 			last() –return the last element by value
-	size			count() –return how many elements exist in the list
-	removeIndex		erase( index ) –remove an element by its index
-	remove			remove( value ) –remove all elements with matching value
-	pop				popBack() –remove the last element
-	shift			popFront() –remove the first element
-	isEmpty			empty() –return a Boolean, true if the list is empty, false otherwise
-	clear			clear() –remove all elements from the list
+	unshift			pushFront( value ) ï¿½add a new value to the front of the list
+	push			pushBack( value ) ï¿½add a new value to the end of the list
+	insert			insert( index, value ) ï¿½add a new value one-past the specified index location
+	first			first() ï¿½return the first element by value
+	last 			last() ï¿½return the last element by value
+	size			count() ï¿½return how many elements exist in the list
+	removeIndex		erase( index ) ï¿½remove an element by its index
+	remove			remove( value ) ï¿½remove all elements with matching value
+	pop				popBack() ï¿½remove the last element
+	shift			popFront() ï¿½remove the first element
+	isEmpty			empty() ï¿½return a Boolean, true if the list is empty, false otherwise
+	clear			clear() ï¿½remove all elements from the list
 */
 
 
@@ -67,9 +67,9 @@ namespace atyp
 
 		//Shifts all Elements down to compress the array
 		void moveDown(int begin, int amount = 1){
-			decrease(amount);
-			if(length >= 1 && begin + amount < length)
+			if (length >= 1 && begin + amount < m_size)
 				memcpy(adr + begin, adr + begin + amount, sizeof(T) * (length - begin));
+			decrease(amount);
 		}
 
 		// Array<T>::Iterator<T>
