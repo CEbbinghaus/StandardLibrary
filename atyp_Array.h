@@ -35,69 +35,69 @@ namespace atyp
 	//		values.map([](int item, int index){return pow(5, index);});
 	//		//	Result should be every power of 5 from 1 to 100
 	template <typename T>
-	class Array{
+	class Array {
 		T* adr;
 		int m_size;
 
 	protected:
 		//Ensures there is always memory to write to. Allocates More memory if Nessecary
-		void increase(int amount = 1){
-			if((length + amount) > m_size){
+		void increase(int amount = 1) {
+			if ((length + amount) > m_size) {
 				m_size = (m_size + amount) * 2;
 				T* tmp = (T*)malloc(sizeof(T) * m_size);
-				if(!tmp)throw "Out of Memory";
+				if (!tmp)throw "Out of Memory";
 				memcpy(tmp, adr, sizeof(T) * length);
-				if(adr != nullptr)free(adr);
+				if (adr != nullptr)free(adr);
 				adr = tmp;
 			}
 		}
 
 		//Ensures that the Array is Able to Decrease size
-		void decrease(int amount = 1){
-			if(length > 0)
+		void decrease(int amount = 1) {
+			if (length > 0)
 				length -= amount;
 		}
 
 		//Shifts all Array elements Up to make space for more
-		void moveUp(int begin, int amount = 1){
+		void moveUp(int begin, int amount = 1) {
 			increase(amount);
 			memmove(adr + (begin + amount), adr + begin, sizeof(T) * (length - begin));
 		}
 
 		//Shifts all Elements down to compress the array
-		void moveDown(int begin, int amount = 1){
+		void moveDown(int begin, int amount = 1) {
 			assert(begin >= 0 && length >= 1);
-			if(length >= 1 && begin + amount < length)
-				memcpy(adr + begin, adr + begin, sizeof(T) * (length - (begin + amount)));
+			if (length >= 1 && begin + amount < length)
+				memcpy(adr + begin, adr + begin + amount, sizeof(T) * (length - (begin + amount)));
 			decrease(amount);
 		}
 
 		// Array<T>::Iterator<T>
 		//		Iterator to loop Through Array.
-		class Iterator{
+		class Iterator {
 		public:
 
 			T* current;
 			int index;
 
-			Iterator(T* ptr) : current(ptr){
+			Iterator(T* ptr) : current(ptr) {
 				index = 0;
 			};
-			Iterator& operator++(){
+			Iterator& operator++() {
 				++index;
 
 				++current;
 
 				return *this;
 			}
-			bool operator!=(const Iterator& other) const{
+			bool operator!=(const Iterator& other) const {
 				return other.current != current;
 			}
-			Iterator& operator*(){
+			Iterator& operator*() {
 				return *this;
 			}
 
-			operator T&(){
+			operator T&() {
 				return *current;
 			}
 		};
@@ -108,7 +108,7 @@ namespace atyp
 
 		//	Array<T>()
 		//		Default Constructor with no Data
-		Array(){
+		Array() {
 			length = 0;
 			m_size = 1;
 			adr = (T*)malloc(sizeof(T));
@@ -116,7 +116,7 @@ namespace atyp
 
 		//	Array<T>(int Size)
 		//		Creates a empty Array of a certain Size
-		Array(int size){
+		Array(int size) {
 			m_size = size;
 			length = 0;
 			adr = (T*)malloc(sizeof(T) * size);
@@ -124,7 +124,7 @@ namespace atyp
 
 		//	Array<T>(std::initializer_list<T> values)
 		//		Creates Array 
-		Array(std::initializer_list<T> values){
+		Array(std::initializer_list<T> values) {
 			m_size = length = (int)values.size();
 			adr = (T*)malloc(sizeof(T) * length);
 			memcpy(adr, values.begin(), sizeof(T) * length);
@@ -132,7 +132,7 @@ namespace atyp
 
 		//	Array<T>(Array<T>& Original)
 		//		Creates a copy of the Original
-		Array(Array<T>& original){
+		Array(Array<T>& original) {
 			adr = (T*)malloc(sizeof(T) * original.length);
 			memcpy(adr, original.data(), sizeof(T) * original.length);
 			m_size = length = original.length;
@@ -140,7 +140,7 @@ namespace atyp
 
 		//	Array<T>(Array<T>&& Original)
 		//		Creates a copy of the Original
-		Array(Array<T>&& original){
+		Array(Array<T>&& original) {
 			adr = (T*)malloc(sizeof(T) * original.length);
 			memcpy(adr, original.data(), sizeof(T) * original.length);
 			m_size = length = original.length;
@@ -148,7 +148,7 @@ namespace atyp
 
 		//	~Array<T>() 
 		//		Deconstructs the Array
-		~Array(){
+		~Array() {
 			free(adr);
 			adr = nullptr;
 		}
@@ -161,16 +161,16 @@ namespace atyp
 		//			if(&a == nullptr)//fallback 
 		//
 		//		Errors Will Dissapear when Compiling for Release
-		T& operator[] (int i){
+		T& operator[] (int i) {
 			assert(i < length && length > 0 && i >= 0);
-			if(i >= length)throw "Trying to Access Data outside the Array";
+			if (i >= length)throw "Trying to Access Data outside the Array";
 			return (adr[i]);
 		}
 
 		//	Array<T> = (Array<T>& Original)
 		//		Copy Operator
-		Array<T>& operator =(Array<T>& original){
-			if(adr != nullptr)free(adr);
+		Array<T>& operator =(Array<T>& original) {
+			if (adr != nullptr)free(adr);
 			length = original.length;
 			adr = (T*)malloc(sizeof(T) * length);
 			memcpy(adr, original.data(), sizeof(T) * length);
@@ -179,8 +179,8 @@ namespace atyp
 
 		//	Array<T> = (Array<T>&& Original)
 		//		RValue Copy Operator
-		Array<T>& operator =(Array<T>&& original){
-			if(adr != nullptr)free(adr);
+		Array<T>& operator =(Array<T>&& original) {
+			if (adr != nullptr)free(adr);
 			adr = (T*)malloc(sizeof(T) * original.length);
 			memcpy(adr, original.data(), sizeof(T) * original.length);
 			m_size = length = original.length;
@@ -189,8 +189,8 @@ namespace atyp
 
 		//	Array<T> = (std::initializer_list<T> Values)
 		//		Sets a Array to a Initializer List.
-		Array<T>& operator =(std::initializer_list<T> values){
-			if(adr != nullptr)free(adr);
+		Array<T>& operator =(std::initializer_list<T> values) {
+			if (adr != nullptr)free(adr);
 			m_size = (int)length = values.size();
 			adr = (T*)malloc(sizeof(T) * length);
 			memcpy(adr, values.begin(), sizeof(T) * length);
@@ -199,11 +199,11 @@ namespace atyp
 
 		//	Array<T> == Array<T>
 		//		Compares Two Arrays by comparing each individual Element.
-		bool operator ==(Array<T> other){
-			if(length != other.length)return false;
+		bool operator ==(Array<T> other) {
+			if (length != other.length)return false;
 
-			for(int i = 0; i < other.count(); ++i){
-				if(adr[0] != other[0])
+			for (int i = 0; i < other.count(); ++i) {
+				if (adr[0] != other[0])
 					return false;
 			}
 			return true;
@@ -211,33 +211,33 @@ namespace atyp
 
 		//	Array<T> << Array<T>
 		//		Concatinates an array with another
-		Array<T>& operator <<(Array<T> other){
+		Array<T>& operator <<(Array<T> other) {
 			push(other);
 			return *this;
 		}
 
 		//	Array<T> << T Element
 		//		pushes an Element onto the end of the Array
-		Array<T>& operator <<(T element){
+		Array<T>& operator <<(T element) {
 			push(element);
 			return *this;
 		}
 
 		//	T& Array<T>::first()
 		//		returns the first Element in the Array
-		T& first(){
+		T& first() {
 			return adr[0];
 		}
 
 		//	T& Array<T>::last()
 		//		returns the last Element in the Array
-		T& last(){
+		T& last() {
 			return adr[length - 1];
 		}
 
 		//	void Array<T>::clear()
 		//		removes all elements from an array
-		void clear(){
+		void clear() {
 			free(adr);
 			adr = nullptr;
 			m_size = 0;
@@ -247,8 +247,8 @@ namespace atyp
 		// Iterator Array<T>::begin()
 		//		Returns the Iterator for the first element of the Array
 		//		=Used in Range based For loops=
-		Iterator begin(){
-			if(!length)
+		Iterator begin() {
+			if (!length)
 				return Iterator(nullptr);
 			return Iterator(&adr[0]);
 		}
@@ -256,8 +256,8 @@ namespace atyp
 		//	Iterator Array<T>::end()
 		//		Returns the Iterator for the last element of the Array
 		//		=used in Range based For loops=
-		Iterator end(){
-			if(!length)
+		Iterator end() {
+			if (!length)
 				return Iterator(nullptr);
 			return Iterator(&adr[length]);
 		}
@@ -265,31 +265,31 @@ namespace atyp
 		//	void Array<T>::empty()
 		//		empties the Array by setting its length to 0.
 		//		WARNING: Memory stays intact. Only use this to write over the same memory else use .clear()
-		void empty(){
+		void empty() {
 			length = 0;
 		}
 
 		//	bool Array<T>::isEmpty()
 		//		checks if the Array is empty by measuring its length.
 		//		WARNING: Doesnt check Memory only Length.
-		bool isEmpty(){
+		bool isEmpty() {
 			return length == 0;
 		}
 
 		//	void Array<T>::forEach(function(T Element, int Index) => void)
 		//		loops over every Element of the Array and calls a function on that element
 		//		Deprechiated: Use "for(T& : Array<T>)" instead
-		void forEach(std::function<void(T element, int i)> func){
-			for(int i = 0; i < length; i++){
+		void forEach(std::function<void(T element, int i)> func) {
+			for (int i = 0; i < length; i++) {
 				func(adr[i], i);
 			}
 		}
 
 		//	Array<T> Array<T>::map(function(T Element, int Index) => T result)
 		//		Loops over every element Creates a new Array from the Values
-		Array<T> map(std::function<T(T element, int i)> func){
+		Array<T> map(std::function<T(T element, int i)> func) {
 			Array<T> res(length);
-			for(int i = 0; i < length; i++){
+			for (int i = 0; i < length; i++) {
 				res[i] = func(adr[i], i);
 			}
 			return res;
@@ -298,9 +298,9 @@ namespace atyp
 		//	Array<nT> Array<T>::map(function(T Element, int Index) => nT result)
 		//		Creates a new Array of type nT and fills it with a value decided by the function
 		template<typename nT>
-		Array<nT> map(std::function<nT(T element, int i)> func){
+		Array<nT> map(std::function<nT(T element, int i)> func) {
 			Array<nT> res(length);
-			for(int i = 0; i < length; i++){
+			for (int i = 0; i < length; i++) {
 				res[i] = func(adr[i], i);
 			}
 			return res;
@@ -308,7 +308,7 @@ namespace atyp
 
 		//	Array<T> Array<T>::copy()
 		//		Returns a Copy of the Array
-		Array<T> copy(){
+		Array<T> copy() {
 			return Array<T>(*this);
 		}
 
@@ -323,9 +323,9 @@ namespace atyp
 
 		//	void Array<T>::remove(T Element)
 		//		Removes every Element Matching the Argument
-		void remove(T element){
-			for(int i = 0; i < length; i++){
-				if(adr[i] == element){
+		void remove(T element) {
+			for (int i = 0; i < length; i++) {
+				if (adr[i] == element) {
 					moveDown(i);
 				}
 			}
@@ -333,10 +333,10 @@ namespace atyp
 
 		//	Array<T> Array<T>::filter(function(T Element) => bool)
 		//		Returns a Array of every element that matches the Given filter
-		Array<T> filter(std::function<bool(T element)> func){
+		Array<T> filter(std::function<bool(T element)> func) {
 			Array<T> ret;
-			for(int i = 0; i < length; i++){
-				if(func(adr[i])){
+			for (int i = 0; i < length; i++) {
+				if (func(adr[i])) {
 					ret.push(adr[i]);
 				}
 			}
@@ -344,19 +344,19 @@ namespace atyp
 		}
 
 		//TODO: Implement Sorting **ELEGANTLY**
-		void sort(std::function<bool(T elementA, T elementB)> lessThan){
-			auto swap = [](T* a, T* b){
+		void sort(std::function<bool(T elementA, T elementB)> lessThan) {
+			auto swap = [](T* a, T* b) {
 				T tmp = *a;
 				*a = *b;
 				*b = tmp;
 			};
 			auto partition =
-				[&](int min, int max){
+				[&](int min, int max) {
 				T pivot = adr[max];
 				int j = min - 1;
 
-				for(int i = min; i < max; i++){
-					if(lessThan(adr[i], pivot)){
+				for (int i = min; i < max; i++) {
+					if (lessThan(adr[i], pivot)) {
 						j++;
 						swap(&adr[j], &adr[i]);
 					}
@@ -365,8 +365,8 @@ namespace atyp
 				return j + 1;
 			};
 
-			std::function<void(int min, int max)> quickSort = [&](int min, int max){
-				if(min < max){
+			std::function<void(int min, int max)> quickSort = [&](int min, int max) {
+				if (min < max) {
 					int pi = partition(min, max);
 					quickSort(min, pi - 1);
 					quickSort(pi + 1, max);
@@ -377,10 +377,10 @@ namespace atyp
 		}
 
 		//TODO: Implement Sorting **ELEGANTLY**
-		void sort(std::function<unsigned int(T element)> getValue){
-			unsigned int largest = [this, &getValue]()->unsigned int{
+		void sort(std::function<unsigned int(T element)> getValue) {
+			unsigned int largest = [this, &getValue]()->unsigned int {
 				unsigned int l = 0;
-				for(T& e : *this){
+				for (T& e : *this) {
 					l = getValue(e) > l ? getValue(e) : l;
 				}
 				return l;
@@ -388,30 +388,30 @@ namespace atyp
 
 			//
 			int size = 0;
-			for(unsigned int target = 1, result = 1; result > 0; target *= 10){
+			for (unsigned int target = 1, result = 1; result > 0; target *= 10) {
 				result = (int)(largest >= target);
 				size += result;
 			}
 
 			// Returns the number at a certain Digit. e.g: (52463, 3) would be 2 because 2 is the fourth character 
-			auto getDigit = [](unsigned int number, int digit){
+			auto getDigit = [](unsigned int number, int digit) {
 				unsigned long long int exp = pow(10, digit);
 				return (unsigned int)floor((number % (exp * 10)) / exp);
 			};
 
 			//counting sort
-			auto count = [&](int digit)-> void{
-				unsigned int count[10] = {0,0,0,0,0,0,0,0,0,0};
+			auto count = [&](int digit)-> void {
+				unsigned int count[10] = { 0,0,0,0,0,0,0,0,0,0 };
 				int i = 0;
 
-				for(; i < length; i++)
+				for (; i < length; i++)
 					count[getDigit(getValue(adr[i]), digit)]++;
 
-				for(i = 1; i < 10; i++)
+				for (i = 1; i < 10; i++)
 					count[i] += count[i - 1];
 
 				auto result = copy();
-				for(i = length - 1; i >= 0; i--){
+				for (i = length - 1; i >= 0; i--) {
 					int countIndex = getDigit(getValue(adr[i]), digit);
 					unsigned int value = count[countIndex];
 					result[value - 1] = adr[i];
@@ -419,24 +419,24 @@ namespace atyp
 				}
 				*this = result;
 			};
-			for(int i = 0; i < size; i++)
+			for (int i = 0; i < size; i++)
 				count(i);
 		}
 
 		// void Array<T>::reverse()
 		//		Reverses the Order of the Array
-		void reverse(){
+		void reverse() {
 			Array<T> copy(*this);
-			for(int i = 0; i < length; i++){
+			for (int i = 0; i < length; i++) {
 				adr[i] = copy[length - (i + 1)];
 			}
 		}
 
 		// Array<T> Array<T>::slice(int Begin, int End?)
 		//		Returns a subsection of an Array as another Instance
-		Array<T> slice(int begin, int end = -1){
+		Array<T> slice(int begin, int end = -1) {
 			assert(end >= -1 && begin >= 0);
-			if(end == -1 || end > length)end = length;
+			if (end == -1 || end > length)end = length;
 			assert(end > begin);
 			Array<T> res(end - begin);
 			memcpy(res.data(), adr + begin, sizeof(T) * (end - begin));
@@ -445,9 +445,9 @@ namespace atyp
 
 		//	Array<T> Array<T>::cut(int Begin, int End?)
 		//		Removes the Elements from the Array and returns them as a new Instance of itself
-		Array<T> cut(int begin, int end = -1){
+		Array<T> cut(int begin, int end = -1) {
 			assert((end > 1 || end == -1) && begin >= 0);
-			if(end == -1 || end > length)end = length;
+			if (end == -1 || end > length)end = length;
 			assert(end > begin);
 			Array<T> res(end - begin);
 			memcpy(res.data(), adr + begin, sizeof(T) * (end - begin));
@@ -457,22 +457,22 @@ namespace atyp
 
 		// void Array<T>::removeIndex(int Index)
 		//		Removed a Array Element by its Index
-		void removeIndex(int index){
+		void removeIndex(int index) {
 			moveDown(index);
 		}
 
 		// int Array<T>::indexOf(T Element)
 		//		Returns the Index of a Element in the Array. if it couldnt find one will return -1
-		int indexOf(T element){
-			for(int i = 0; i < length; i++){
-				if(adr[i] == element)return i;
+		int indexOf(T element) {
+			for (int i = 0; i < length; i++) {
+				if (adr[i] == element)return i;
 			}
 			return -1;
 		}
 
 		//	Array<T> Array<T>::concat(Array<T> Data)
 		//		Concatinates Another Array onto the End
-		Array<T>& concat(Array<T> data){
+		Array<T>& concat(Array<T> data) {
 			push(data);
 			return *this;
 		}
@@ -482,7 +482,7 @@ namespace atyp
 
 		// void Array<T>::push(T Element)
 		//		Pushes an Element onto the Back of an Array
-		void push(T element){
+		void push(T element) {
 			increase();
 			memcpy(adr + (length), &element, sizeof(T));
 			++length;
@@ -490,7 +490,7 @@ namespace atyp
 
 		//	void Array<T>::push(std::initializer_list<T> Values)
 		//		adds a initializer list of elements onto the end of the Array
-		void push(std::initializer_list<T> values){
+		void push(std::initializer_list<T> values) {
 			increase((int)values.size());
 			memcpy(adr + (length), values.begin(), sizeof(T) * values.size());
 			length += (int)values.size();
@@ -498,7 +498,7 @@ namespace atyp
 
 		//	void Array<T>::push(Array<T> Values)
 		//		adds another array onto the end. Does the same as .concat
-		void push(Array<T> values){
+		void push(Array<T> values) {
 			increase(values.length);
 			memcpy(adr + (length), values.adr, sizeof(T) * values.length);
 			length += values.length;
@@ -506,7 +506,7 @@ namespace atyp
 		//	void Array<T>::push(T...Args)
 		//		Adds Multiple Arguments on the end of the Array
 		template<typename ... Args>
-		void push(T element, const Args&... rest){
+		void push(T element, const Args&... rest) {
 			push(element);
 			push(rest...);
 		}
@@ -515,7 +515,7 @@ namespace atyp
 
 		// void Array<T>::insert(int Index, T Element)
 		//		Inserts a Element at a given Index
-		void insert(int index, T element){
+		void insert(int index, T element) {
 			moveUp(index);
 			adr[index] = element;
 			++length;
@@ -523,7 +523,7 @@ namespace atyp
 
 		//	void Array<T>::insert(int Index, std::Initializer_List<T> Values)
 		//		Inserts a Initializer List of Values into the Array at a given Index
-		void insert(int index, std::initializer_list<T> values){
+		void insert(int index, std::initializer_list<T> values) {
 			moveUp(index, values.size());
 			memcpy(adr + index, values.begin(), sizeof(T) * values.size());
 			length += (int)values.size();
@@ -531,7 +531,7 @@ namespace atyp
 
 		// void Array<T>::insert(int Index, Array<T> Values)
 		//		Inserts another Array into the Array at a certain Index
-		void insert(int index, Array<T> values){
+		void insert(int index, Array<T> values) {
 			moveUp(index, values.length);
 			memcpy(adr + index, values.adr, sizeof(T) * values.length);
 			length += values.length;
@@ -540,7 +540,7 @@ namespace atyp
 		//	void Array<T>::insert(int Index, T... args)
 		//		Inserts Multiple Arguments into the Array at a certain Index
 		template<typename ... Args>
-		void insert(int index, T element, const Args&... rest){
+		void insert(int index, T element, const Args&... rest) {
 			insert(index, element);
 			insert(++index, rest...);
 		}
@@ -549,7 +549,7 @@ namespace atyp
 
 		// void Array<T>::unshift(T Element)
 		//		Adds a Element onto the front of the Array
-		void unshift(T element){
+		void unshift(T element) {
 			moveUp(0);
 			adr[0] = element;
 			++length;
@@ -557,7 +557,7 @@ namespace atyp
 
 		//	void Array<T>::unshift(std::initializer_list<T> Values)
 		//		Adds a Initliazer list of Element onto the front of the array
-		void unshift(std::initializer_list<T> values){
+		void unshift(std::initializer_list<T> values) {
 			moveUp(0, values.size());
 			memcpy(adr, values.begin(), sizeof(T) * values.size());
 			length += (int)values.size();
@@ -565,7 +565,7 @@ namespace atyp
 
 		//	void Array<T>::unshift(Array<T> Values)
 		//		adds another Array onto the front of the Array
-		void unshift(Array<T> values){
+		void unshift(Array<T> values) {
 			moveUp(0, values.length);
 			memcpy(adr, values.adr, sizeof(T) * values.length);
 			length += values.length;
@@ -574,7 +574,7 @@ namespace atyp
 		//	void Array<T>::unshift(T...Args)
 		//		Adds Multiple arguments onto the front of the Array
 		template<typename ... Args>
-		void unshift(T element, const Args&... rest){
+		void unshift(T element, const Args&... rest) {
 			unshift(rest...);
 			unshift(element);
 		}
@@ -584,9 +584,9 @@ namespace atyp
 		//T Array<T>::pop()
 		//		Removes the Last Element of the Array and returns it
 		//		WARNING: If the Array has no Elements it will throw and error and return a reference to a nullptr. CHECK THE ADRESS OF THE RETURNED OBJECT
-		T pop(){
+		T pop() {
 			assert(length > 0);
-			if(length <= 0)throw "Nothing Left to Pop";
+			if (length <= 0)throw "Nothing Left to Pop";
 			decrease();
 			return adr[length];
 		}
@@ -594,9 +594,9 @@ namespace atyp
 		//T Array<T>::shift()
 		//		Removes the first Element of the Array and returns it
 		//		WARNING: If the Array has no Elements it will throw and error and return a reference to a nullptr. CHECK THE ADRESS OF THE RETURNED OBJECT
-		T shift(){
+		T shift() {
 			assert(length > 0);
-			if(length <= 0)return nullobj;
+			if (length <= 0)return nullobj;
 			T r = adr[0];
 			moveDown(0);
 			return r;
@@ -604,21 +604,21 @@ namespace atyp
 
 		//	T* Array<T>::data()
 		//		Returns the Adress of the Array. Can be used to Memcpy or other
-		T* data(){
+		T* data() {
 			return adr;
 		}
 
 		//	int Array<T>::size()
 		//		Returns the Length of the Array
-		int size(){
+		int size() {
 			return length;
 		}
 	};
 
 	template<typename T>
-	std::ostream& operator<<(std::ostream& os, Array<T>& data){
+	std::ostream& operator<<(std::ostream& os, Array<T>& data) {
 		unsigned int i = 0;
-		for(T& e : data){
+		for (T& e : data) {
 			os << '[' << i++ << ']' << " -> " << e << std::endl;
 		}
 		return os;
@@ -626,7 +626,7 @@ namespace atyp
 	}
 
 	template<typename T>
-	std::ostream& operator<<(std::ostream& os, Array<T>&& data){
+	std::ostream& operator<<(std::ostream& os, Array<T>&& data) {
 		Array<T>* p = &data;
 		os << *p;
 		return os;
