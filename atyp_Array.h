@@ -36,13 +36,12 @@ namespace atyp
 	//		//	Result should be every power of 5 from 1 to 100
 	template <typename T>
 	class Array{
-		T* adr = nullptr;
+		T* adr;
 		int m_size;
 
 	protected:
 		//Ensures there is always memory to write to. Allocates More memory if Nessecary
 		void increase(int amount = 1){
-			//Assert(m_size >= length, "TESTING")
 			if((length + amount) > m_size){
 				m_size = (m_size + amount) * 2;
 				T* tmp = (T*)malloc(sizeof(T) * m_size);
@@ -55,8 +54,8 @@ namespace atyp
 
 		//Ensures that the Array is Able to Decrease size
 		void decrease(int amount = 1){
-			//Assert(m_size >= 0, "TESTING")
-			length -= amount;
+			if(length > 0)
+				length -= amount;
 		}
 
 		//Shifts all Array elements Up to make space for more
@@ -67,8 +66,9 @@ namespace atyp
 
 		//Shifts all Elements down to compress the array
 		void moveDown(int begin, int amount = 1){
-			if (length >= 1 && begin + amount < m_size)
-				memcpy(adr + begin, adr + begin + amount, sizeof(T) * (length - begin));
+			assert(begin >= 0 && length >= 1);
+			if(length >= 1 && begin + amount < length)
+				memcpy(adr + begin, adr + begin, sizeof(T) * (length - (begin + amount)));
 			decrease(amount);
 		}
 
@@ -76,20 +76,27 @@ namespace atyp
 		//		Iterator to loop Through Array.
 		class Iterator{
 		public:
+
 			T* current;
 			int index;
-			Iterator(T* ptr) : current(ptr){ index = 0; };
-			Iterator& operator++(){
-				index++;
 
-				current++;
+			Iterator(T* ptr) : current(ptr){
+				index = 0;
+			};
+			Iterator& operator++(){
+				++index;
+
+				++current;
 
 				return *this;
 			}
-			//Iterator& operator++(int) { index++; current = current + 1; return *this; }
-			bool operator!=(const Iterator& other) const{ return other.current != current; }
-			bool operator==(const Iterator& other) const{ return other.current == current; }
-			Iterator& operator*(){ return *this; }
+			bool operator!=(const Iterator& other) const{
+				return other.current != current;
+			}
+			Iterator& operator*(){
+				return *this;
+			}
+
 			operator T&(){
 				return *current;
 			}
@@ -439,7 +446,7 @@ namespace atyp
 		//	Array<T> Array<T>::cut(int Begin, int End?)
 		//		Removes the Elements from the Array and returns them as a new Instance of itself
 		Array<T> cut(int begin, int end = -1){
-			assert(end >= -1 && begin >= 0);
+			assert((end > 1 || end == -1) && begin >= 0);
 			if(end == -1 || end > length)end = length;
 			assert(end > begin);
 			Array<T> res(end - begin);
