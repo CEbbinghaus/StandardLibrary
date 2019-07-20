@@ -7,42 +7,31 @@ namespace atyp {
 	class hash {
 		class modifier {
 			friend hash;
-			hash* _data;
+			unsigned char* _data;
 			unsigned int index;
 			~modifier() {}
-			modifier(hash* data) {
+			modifier(unsigned char* data) {
 				_data = data;
 				index = 0;
 			}
-			
-			modifier(modifier& other) {
-				_data = other._data;
-				index = other.index;
-			}
-			
-			modifier(modifier&& other) {
-				_data = other._data;
-				other._data = nullptr;
-				index = other.index;
-			}
-
 
 			modifier& operator[](unsigned int a_index) {
+				if (index >= bytes * CHAR_BIT)throw "Invalid Index";
 				index = a_index;
 				return *this;
 			}
 		public:
 
 			modifier& operator = (bool value) {
-				unsigned int x = index / 8;
-				unsigned char y = index % 8;
-				unsigned char& d = _data->_data[x];
+				unsigned int x = index / CHAR_BIT;
+				unsigned char y = index % CHAR_BIT;
+				unsigned char& d = _data[x];
 				d = (d ^ (0b1 << y)) | value << y;
 				return *this;
 			}
 
 			operator bool() {
-				return _data->_data[index / 8] & (0b1 << (index % 8));
+				return _data[index / CHAR_BIT] & (0b1 << (index % CHAR_BIT));
 			}
 		};
 		modifier* _mod;
@@ -51,20 +40,20 @@ namespace atyp {
 		hash() {
 			_data = new unsigned char[bytes];
 			memset(_data, 0, bytes);
-			_mod = new modifier(this);
+			_mod = new modifier(_data);
 			_mod->index = 0;
 		}
 		~hash() {
 			if(_mod)
 				delete _mod;
 			if(_data)
-				delete )data;
+				delete _data;
 		}
 
 		hash<bytes>& operator = (hash<bytes>& other){
-			_mod = new modifier(other._mod);
-			_data = new char[bytes];
-			memcpy(_data, other._data, bytes);
+			_data = new unsigned char[bytes];
+			memcpy(_data, other.data(), bytes);
+			_mod = new modifier(_data);
 			return *this;
 		}
 		

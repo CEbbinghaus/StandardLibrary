@@ -617,8 +617,8 @@ namespace atyp
 
 	template<typename T>
 	std::ostream& operator<<(std::ostream& os, Array<T>& data) {
-		unsigned int i = 0;
-		for (T& e : data) {
+		for (unsigned int i = 0; i < data.length; ++i) {
+			T& e = data[i];
 			os << '[' << i++ << ']' << " -> " << e << std::endl;
 		}
 		return os;
@@ -630,6 +630,5 @@ namespace atyp
 		Array<T>* p = &data;
 		os << *p;
 		return os;
-
 	}
 }
