@@ -104,7 +104,7 @@ namespace atyp
 	public:
 
 		//length of the Array. Can be Decreased to Shorten an array
-		int length;
+		unsigned int length;
 
 		//	Array<T>()
 		//		Default Constructor with no Data
@@ -117,8 +117,7 @@ namespace atyp
 		//	Array<T>(int Size)
 		//		Creates a empty Array of a certain Size
 		Array(int size) {
-			m_size = size;
-			length = 0;
+			length = m_size = size;
 			adr = (T*)malloc(sizeof(T) * size);
 		}
 
@@ -343,7 +342,8 @@ namespace atyp
 			return ret;
 		}
 
-		//TODO: Implement Sorting **ELEGANTLY**
+		//	void Array<T>::sort(function(T elementA, T elementB) => bool)
+		//		Sorts an Array using QuickSort. Provide a Function that compares A to B and returns true if A is less than B.
 		void sort(std::function<bool(T elementA, T elementB)> lessThan) {
 			auto swap = [](T* a, T* b) {
 				T tmp = *a;
@@ -376,7 +376,8 @@ namespace atyp
 			quickSort(0, length - 1);
 		}
 
-		//TODO: Implement Sorting **ELEGANTLY**
+		//	void Array<T>::sort(function(T Element) => unsigned int)
+		//		Sorts an Array using Counting sort. Very efficient but requires Unigned Int's to work.
 		void sort(std::function<unsigned int(T element)> getValue) {
 			unsigned int largest = [this, &getValue]()->unsigned int {
 				unsigned int l = 0;
@@ -537,14 +538,6 @@ namespace atyp
 			length += values.length;
 		}
 
-		//	void Array<T>::insert(int Index, T... args)
-		//		Inserts Multiple Arguments into the Array at a certain Index
-		template<typename ... Args>
-		void insert(int index, T element, const Args&... rest) {
-			insert(index, element);
-			insert(++index, rest...);
-		}
-
 		//------------UNSHIFT-----------------------------------------------
 
 		// void Array<T>::unshift(T Element)
@@ -571,19 +564,11 @@ namespace atyp
 			length += values.length;
 		}
 
-		//	void Array<T>::unshift(T...Args)
-		//		Adds Multiple arguments onto the front of the Array
-		template<typename ... Args>
-		void unshift(T element, const Args&... rest) {
-			unshift(rest...);
-			unshift(element);
-		}
-
 		//------------------------------------------------------------------
 
 		//T Array<T>::pop()
 		//		Removes the Last Element of the Array and returns it
-		//		WARNING: If the Array has no Elements it will throw and error and return a reference to a nullptr. CHECK THE ADRESS OF THE RETURNED OBJECT
+		//		WARNING: If the Array has no Elements it will throw an error.
 		T pop() {
 			assert(length > 0);
 			if (length <= 0)throw "Nothing Left to Pop";
@@ -593,18 +578,18 @@ namespace atyp
 
 		//T Array<T>::shift()
 		//		Removes the first Element of the Array and returns it
-		//		WARNING: If the Array has no Elements it will throw and error and return a reference to a nullptr. CHECK THE ADRESS OF THE RETURNED OBJECT
+		//		WARNING: If the Array has no Elements it will throw an error.
 		T shift() {
 			assert(length > 0);
-			if (length <= 0)return nullobj;
+			if (length <= 0)throw "Cannot Shift";
 			T r = adr[0];
 			moveDown(0);
 			return r;
 		}
 
-		//	T* Array<T>::data()
+		//	const T* Array<T>::data()
 		//		Returns the Adress of the Array. Can be used to Memcpy or other
-		T* data() {
+		const T* data() const {
 			return adr;
 		}
 
@@ -617,7 +602,7 @@ namespace atyp
 
 	template<typename T>
 	std::ostream& operator<<(std::ostream& os, Array<T>& data) {
-		for (unsigned int i = 0; i < data.length; ++i) {
+		for (unsigned int i = 0; i < data.length;) {
 			T& e = data[i];
 			os << '[' << i++ << ']' << " -> " << e << std::endl;
 		}
