@@ -121,7 +121,7 @@ namespace atyp {
 	static std::bitset<bytes * 8> hearsum(const char* data, const unsigned int dLength) {
 		std::bitset<bytes* CHAR_BIT> hash = 0;
 
-		char salt[] = {232, 253, 223};
+		char salt[] = {(char)232, (char)253, (char)223};
 
 		char*** snow = new char**[bytes]; // X = Bytes
 		{

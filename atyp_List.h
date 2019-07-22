@@ -117,10 +117,6 @@ namespace atyp {
 
 
 				if (!(current->valid))return  * this;
-
-				unsigned int adress = (unsigned int)(&current->data);
-				memcpy(&r, &adress, sizeof(unsigned int));
-
 				r.d_node = current;
 
 				r.index = index;
@@ -168,6 +164,7 @@ namespace atyp {
 
 		~List(){
 			clearData();
+			delete m_first;
 			delete m_last;
 		}
 

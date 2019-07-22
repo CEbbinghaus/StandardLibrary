@@ -29,14 +29,14 @@ namespace atyp {
 	//	//template <std::vector<int>>
 	//	//void doSomething(std::vector<int> * v)
 	//};
-	class BinaryTree {
-		class Node {
+	class BinaryTree{
+		class Node{
 		public:
 			Node* l = nullptr;
 			Node* r = nullptr;
 			Node* p = nullptr;
 			int v = 0;
-			Node(int value, Node* parent) {
+			Node(int value, Node* parent){
 				p = parent;
 				v = value;
 			}
@@ -44,33 +44,37 @@ namespace atyp {
 				delete l;
 				delete r;
 			}
-			bool empty() {
+			bool empty(){
 				return (l == nullptr && r == nullptr);
 			}
-			void add(const int& value) {
-				if (value < v) {
-					if (l)l->add(value);
+			void add(const int& value){
+				if(value < v){
+					if(l)l->add(value);
 					else l = new Node(value, this);
 				}
-				else {
-					if (r)r->add(value);
+				else{
+					if(r)r->add(value);
 					else r = new Node(value, this);
 				}
 			}
-			Node*& operator[] (const char side) {
-				if (side == 'l')return l;
-				if (side == 'r')return r;
+			Node*& operator[] (const char side){
+				if(side == 'l')return l;
+				if(side == 'r')return r;
 				return p;
 			}
 		};
 
 		Node* root = nullptr;
 
-		char nt(char value, char val1, char val2) {
-			if (value == val1)return val2;
+		char nt(char value, char val1, char val2){
+			if(value == val1)return val2;
 			return val1;
 		}
 	public:
+		BinaryTree(){}
+		~BinaryTree(){
+			delete root;
+		}
 		void push(int value) {
 			if (root)root->add(value);
 			else root = new Node(value, nullptr);
