@@ -25,9 +25,6 @@
     <ClInclude Include="atyp_List.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="atyp_Matrix.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="atyp_Queue.h">
       <Filter>Headers</Filter>
     </ClInclude>
@@ -41,6 +38,27 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="atyp_Vectors.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="atyp_All.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="atyp_Matrixs.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="atyp_Matrix3.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="atyp_Matrix4.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="atyp_Vector2.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="atyp_Vector3.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="atyp_Vector4.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
