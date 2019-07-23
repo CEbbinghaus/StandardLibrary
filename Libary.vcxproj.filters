@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="atyp_Array.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="atyp_Assert.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="atyp_BinaryTree.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="atyp_Graph.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="atyp_Hash.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="atyp_Heap.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="atyp_List.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="atyp_Matrix.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="atyp_Queue.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="atyp_Stack.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="atyp_String.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="atyp_Tree.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="atyp_Vectors.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{dae89b91-9c40-46f3-b640-ac3c0eb21704}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

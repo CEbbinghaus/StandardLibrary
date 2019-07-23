@@ -26,3 +26,11 @@
 *.exe
 *.out
 *.app
+
+#Editor Files
+.vs
+.vscode
+
+#Build Files
+build/*
+tmp/*
