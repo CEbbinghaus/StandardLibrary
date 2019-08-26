@@ -136,6 +136,6 @@ public:
 	}
 };
 
-Vector3 operator*(const float n, const Vector3& rhs) {
+inline Vector3 operator*(const float n, const Vector3& rhs) {
 	return Vector3(rhs.x * n, rhs.y * n, rhs.z * n);
 }

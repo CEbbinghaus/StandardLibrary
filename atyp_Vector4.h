@@ -128,6 +128,6 @@ public:
 	}
 };
 
-Vector4 operator*(float lhs, Vector4 rhs) {
+inline Vector4 operator*(float lhs, Vector4 rhs) {
 	return Vector4(rhs.x * lhs, rhs.y * lhs, rhs.z * lhs, rhs.w * lhs);
 }

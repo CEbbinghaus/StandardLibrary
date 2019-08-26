@@ -107,6 +107,6 @@ public:
 	}
 };
 
-Vector2 operator*(float lhs, Vector2 rhs) {
+inline Vector2 operator*(float lhs, Vector2 rhs) {
 	return Vector2(rhs.x * lhs, rhs.y * lhs);
 }

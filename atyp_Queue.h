@@ -8,7 +8,5 @@ namespace atyp {
 	};
 
 	static void test() {
-		Queue<int> test;
-		test.push(4);
 	}
 }
