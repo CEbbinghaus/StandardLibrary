@@ -94,6 +94,18 @@ struct Matrix4
 		return (float*)this;
 	}
 
+	void setScale(float x, float y, float z) {
+		data[0] = x;
+		data[5] = y;
+		data[10] = z;
+	}
+
+	void setPosition(float x, float y, float z) {
+		data[12] = x;
+		data[13] = y;
+		data[14] = z;
+	}
+
 	void setRotateX(float radians) {
 		float cos = cosf(radians);
 		float sin = sinf(radians);

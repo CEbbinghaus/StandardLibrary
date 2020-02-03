@@ -1,5 +1,5 @@
 #pragma once
-#include <iostream>
+#include <memory>
 
 namespace atyp {
 	class String{
@@ -58,7 +58,7 @@ namespace atyp {
 			return adr;
 		}
 
-		unsigned int length() {
+		unsigned int GetLength() {
 			return length;
 		}
 

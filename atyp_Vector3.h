@@ -36,6 +36,26 @@ public:
 		float data[3];
 	};
 
+	static Vector3 one() {
+		return Vector3(1.0, 1.0, 1.0);
+	}
+	
+	static Vector3 zero() {
+		return Vector3(0.0, 0.0, 0.0);
+	}
+
+	static Vector3 right() {
+		return Vector3(1, 0.0, 0.0);
+	}
+
+	static Vector3 up() {
+		return Vector3(0.0, 1, 0.0);
+	}
+
+	static Vector3 forward() {
+		return Vector3(0.0, 0.0, 1);
+	}
+
 	Vector3() {
 		x = y = z = 0;
 	}
@@ -85,9 +105,17 @@ public:
 	Vector3 operator*(float rhs) {
 		return Vector3(x * rhs, y * rhs, z * rhs);
 	}
+	
+	Vector3 operator*(Vector3 rhs) {
+		return Vector3(x * rhs.x, y * rhs.y, z * rhs.z);
+	}
 
 	Vector3 operator/(float rhs) {
 		return Vector3(x / rhs, y / rhs, z / rhs);
+	}
+	
+	Vector3 operator/(Vector3 rhs) {
+		return Vector3(x / rhs.x, y / rhs.y, z / rhs.z);
 	}
 
 
@@ -106,12 +134,28 @@ public:
 	Vector3& operator*=(float rhs) {
 		x *= rhs;
 		y *= rhs;
+		z *= rhs;
+		return *this;
+	}
+
+	Vector3& operator*=(Vector3 rhs) {
+		x *= rhs.x;
+		y *= rhs.y;
+		z *= rhs.z;
 		return *this;
 	}
 
 	Vector3& operator/=(float rhs) {
 		x /= rhs;
 		y /= rhs;
+		z /= rhs;
+		return *this;
+	}
+
+	Vector3& operator/=(Vector3 rhs) {
+		x /= rhs.x;
+		y /= rhs.y;
+		z /= rhs.z;
 		return *this;
 	}
 

@@ -2,6 +2,7 @@
 #include "atyp_Vector2.h"
 #include "atyp_Vector3.h"
 #include <memory>
+
 class Vector4
 {
 public:
