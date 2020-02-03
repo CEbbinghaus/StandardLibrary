@@ -24,6 +24,14 @@ public:
 		x = y = z = w = 0;
 	}
 
+	Vector4(Vector3 v) {
+		x = v.x;
+		y = v.y;
+		z = v.z;
+		
+		w = 0;
+	}
+
 	Vector4(float a_x, float a_y, float a_z, float a_w) {
 		x = a_x;
 		y = a_y;
