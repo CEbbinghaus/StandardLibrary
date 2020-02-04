@@ -12,3 +12,5 @@
 #include "atyp_Tree.h"
 #include "atyp_Matrixs.h"
 #include "atyp_Vectors.h"
+#include "atyp_Quaternion.h"
+#include "atyp_Transform.h"

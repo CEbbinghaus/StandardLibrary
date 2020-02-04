@@ -1,19 +1,12 @@
 #pragma once
-#include <memory>
-
-
 #include "atyp_Vector4.h"
+#include <memory>
+#include <cmath>
 
-/*
-	0 4 8  12
-	1 5 9  13
-	2 6 10 14
-	3 7 11 15
-*/
 
-struct Matrix4
+class Matrix4
 {
-
+public:
 	union{
 		struct{
 			Vector4 XAxis;
@@ -94,16 +87,32 @@ struct Matrix4
 		return (float*)this;
 	}
 
-	void setScale(float x, float y, float z) {
+	Matrix4& setScale(float x, float y, float z) {
 		data[0] = x;
 		data[5] = y;
 		data[10] = z;
+		return *this;
+	}
+	
+	Matrix4& setScale(Vector3 scale) {
+		data[0] = scale.x;
+		data[5] = scale.y;
+		data[10] = scale.z;
+		return *this;
 	}
 
-	void setPosition(float x, float y, float z) {
+	Matrix4& setPosition(float x, float y, float z) {
 		data[12] = x;
 		data[13] = y;
 		data[14] = z;
+		return *this;
+	}
+	
+	Matrix4& setPosition(Vector3 position) {
+		data[12] = position.x;
+		data[13] = position.y;
+		data[14] = position.z;
+		return *this;
 	}
 
 	void setRotateX(float radians) {
@@ -122,7 +131,6 @@ struct Matrix4
 		data[2] = -sin;
 		data[10] = cos;
 	}
-
 	void setRotateZ(float radians) {
 		float cos = cosf(radians);
 		float sin = sinf(radians);
@@ -131,4 +139,35 @@ struct Matrix4
 		data[1] = sin;
 		data[5] = cos;
 	}
+
+	static Matrix4 FromScale(Vector3 scale){
+		return Matrix4().setScale(scale);
+	}
+
+	static Matrix4 FromPosition(Vector3 position){
+		return Matrix4().setPosition(position);
+	}
+
+	static Matrix4 Projection(float fov, float aspect, float near_p, float far_p){
+		Matrix4 m = Matrix4(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+		float f = 1.0f / tan(fov / 2.0f);
+		float nf = 1.0f / (near_p - far_p);
+		m.data[0] = f / aspect;
+		m.data[5] = f;
+		m.data[10] = (far_p + near_p) * nf;
+		m.data[11] = -1.0f;
+		m.data[14] = 2.0f * far_p * near_p * nf;
+
+		return m;
+	}
+
+	void Print(){
+		for(int i = 0; i < 16; ++i){
+			if(i != 0 && (i % 4) == 0)printf("\n");
+			printf("%.2f ", data[i]);
+		}
+		printf("\n"); printf("\n"); printf("\n");
+	}
+
 };

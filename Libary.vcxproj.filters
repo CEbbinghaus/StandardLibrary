@@ -61,6 +61,12 @@
     <ClInclude Include="atyp_Vector4.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="atyp_Quaternion.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="atyp_Transform.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Headers">

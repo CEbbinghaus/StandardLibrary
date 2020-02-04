@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 #include <functional>
-#include <assert.h>
+//#include <assert.h>
 
 #define out std::cout
 #define in std::cin
@@ -169,7 +169,7 @@ namespace atyp {
 		}
 
 		T& operator[] (int index) {
-			assert(index < length);
+			//assert(index < length);
 			int i = 0;
 			for (T& n : *this) {
 				if (index == i)
@@ -179,7 +179,7 @@ namespace atyp {
 		}
 
 		void insert(int index, T value) {
-			assert(index <= length);
+			//assert(index <= length);
 			node* n = new node(value);
 			int i = 0; 
 			Iterator e = end();

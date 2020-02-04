@@ -2,6 +2,8 @@
 #include <memory>
 #include "atyp_Vector2.h"
 
+class Quaternion;
+
 class Vector3
 {
 public:
@@ -178,8 +180,15 @@ public:
 			x * other.y - y * other.x
 		);
 	}
+
+	Vector3& operator-(){
+		x = -x;
+		y = -y;
+		z = -z;
+		return *this;
+	}
 };
 
-inline Vector3 operator*(const float n, const Vector3& rhs) {
+inline Vector3 operator*(const float n, const Vector3& rhs){
 	return Vector3(rhs.x * n, rhs.y * n, rhs.z * n);
 }

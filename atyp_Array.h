@@ -2,9 +2,7 @@
 
 #include<iostream>
 #include <functional>
-#include <assert.h> 
 #include <cstdarg>
-#include <assert.h>
 #include "atyp_Assert.h"
 /*
 	unshift			pushFront( value ) �add a new value to the front of the list
@@ -63,7 +61,7 @@ namespace atyp
 
 		//Shifts all Elements down to compress the array
 		void moveDown(int begin, int amount = 1){
-			assert(begin >= 0 && length >= 1);
+			//assert(begin >= 0 && length >= 1);
 			if(length >= 1 && begin + amount < length)
 				memcpy(adr + begin, adr + begin + amount, sizeof(T) * (length - (begin + amount)));
 			decrease(amount);
@@ -152,7 +150,7 @@ namespace atyp
 		//	Array<T>[unsigned int Index]
 		//		Returns the Value at a certain Index of the Array
 		T& operator[] (unsigned int i){
-			assert(i < length && length > 0 && i >= 0);
+			//assert(i < length && length > 0 && i >= 0);
 			if(i >= length)throw "Trying to Access Data outside the Array";
 			return (adr[i]);
 		}
@@ -427,9 +425,9 @@ namespace atyp
 		// Array<T> Array<T>::slice(int Begin, int End?)
 		//		Returns a subsection of an Array as another Instance
 		Array<T> slice(int begin, int end = -1){
-			assert(end >= -1 && begin >= 0);
+			//assert(end >= -1 && begin >= 0);
 			if(end == -1 || end > length)end = length;
-			assert(end > begin);
+			//assert(end > begin);
 			Array<T> res(end - begin);
 			memcpy(res.adr, adr + begin, sizeof(T) * (end - begin));
 			return res;
@@ -438,9 +436,9 @@ namespace atyp
 		//	Array<T> Array<T>::cut(int Begin, int End?)
 		//		Removes the Elements from the Array and returns them as a new Instance of itself
 		Array<T> cut(int begin, int end = -1){
-			assert((end > 1 || end == -1) && begin >= 0);
+			//assert((end > 1 || end == -1) && begin >= 0);
 			if(end == -1 || end > length)end = length;
-			assert(end > begin);
+			//assert(end > begin);
 			Array<T> res(end - begin);
 			memcpy(res.adr, adr + begin, sizeof(T) * (end - begin));
 			moveDown(begin, (end - begin));
@@ -575,7 +573,7 @@ namespace atyp
 		//		Removes the Last Element of the Array and returns it
 		//		WARNING: If the Array has no Elements it will throw an error.
 		T pop() {
-			assert(length > 0);
+			//assert(length > 0);
 			if (length <= 0)throw "Nothing Left to Pop";
 			decrease();
 			return adr[length];
@@ -585,7 +583,7 @@ namespace atyp
 		//		Removes the first Element of the Array and returns it
 		//		WARNING: If the Array has no Elements it will throw an error.
 		T shift() {
-			assert(length > 0);
+			//assert(length > 0);
 			if (length <= 0)throw "Cannot Shift";
 			T r = adr[0];
 			moveDown(0);

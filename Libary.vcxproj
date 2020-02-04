@@ -28,9 +28,11 @@
     <ClInclude Include="atyp_Heap.h" />
     <ClInclude Include="atyp_List.h" />
     <ClInclude Include="atyp_Matrixs.h" />
+    <ClInclude Include="atyp_Quaternion.h" />
     <ClInclude Include="atyp_Queue.h" />
     <ClInclude Include="atyp_Stack.h" />
     <ClInclude Include="atyp_String.h" />
+    <ClInclude Include="atyp_Transform.h" />
     <ClInclude Include="atyp_Tree.h" />
     <ClInclude Include="atyp_Vectors.h" />
     <ClInclude Include="atyp_Matrix3.h" />
