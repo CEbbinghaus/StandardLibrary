@@ -24,12 +24,20 @@ public:
 		x = y = z = w = 0;
 	}
 
-	Vector4(Vector3 v) {
+	Vector4(Vector2 v, float z, float w) {
+		x = v.x;
+		y = v.y;
+		
+		this->z = z;
+		this->w = w;
+	}
+
+	Vector4(Vector3 v, float w) {
 		x = v.x;
 		y = v.y;
 		z = v.z;
 		
-		w = 0;
+		this->w = w;
 	}
 
 	Vector4(float a_x, float a_y, float a_z, float a_w) {
