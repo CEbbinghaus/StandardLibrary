@@ -167,7 +167,7 @@ public:
 			if(i != 0 && (i % 4) == 0)printf("\n");
 			printf("%.2f ", data[i]);
 		}
-		printf("\n"); printf("\n"); printf("\n");
+		printf("\n");
 	}
 
 };

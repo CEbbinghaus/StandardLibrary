@@ -7,10 +7,10 @@ namespace atyp {
 	class hash {
 		class modifier {
 			friend hash;
-			unsigned char* _data;
+			hash* _data;
 			unsigned int index;
 			~modifier() {}
-			modifier(unsigned char* data) {
+			modifier(hash* data) {
 				_data = data;
 				index = 0;
 			}
@@ -20,29 +20,36 @@ namespace atyp {
 				index = a_index;
 				return *this;
 			}
-		public:
+		  public:
+
+			void ChangeHash(hash* data){
+				_data = data;
+			}
 
 			modifier& operator = (bool value) {
 				unsigned int x = index / CHAR_BIT;
 				unsigned char y = index % CHAR_BIT;
-				unsigned char& d = _data[x];
+				unsigned char& d = _data->_data[x];
 				d = (d ^ (0b1 << y)) | value << y;
 				return *this;
 			}
 
 			operator bool() {
-				return _data[index / CHAR_BIT] & (0b1 << (index % CHAR_BIT));
+				return _data->_data[index / CHAR_BIT] & (0b1 << (index % CHAR_BIT));
 			}
 		};
+
 		modifier* _mod;
 		unsigned char* _data;
+		
 	public:
 		hash() {
 			_data = new unsigned char[bytes];
 			memset(_data, 0, bytes);
-			_mod = new modifier(_data);
+			_mod = new modifier(this);
 			_mod->index = 0;
 		}
+
 		~hash() {
 			if(_mod)
 				delete _mod;
@@ -53,12 +60,13 @@ namespace atyp {
 		hash<bytes>& operator = (hash<bytes>& other){
 			_data = new unsigned char[bytes];
 			memcpy(_data, other.data(), bytes);
-			_mod = new modifier(_data);
+			_mod = new modifier(this);
 			return *this;
 		}
 		
 		hash<bytes>& operator = (hash<bytes>&& other){
 			_mod = other._mod;
+			_mod->ChangeHash(this);
 			other._mod = nullptr;
 			_data = other._data;
 			other._data = nullptr;
@@ -92,15 +100,20 @@ namespace atyp {
 
 		unsigned int bitCount() {
 			unsigned int amount = 0;
-			for (unsigned int i = 0; i < bytes * CHAR_BIT; i++) {
-				amount += (_data[i / 8] & (0b1 << (i % 8))) >> (i % 8);
+			for (unsigned int i = 0; i < bytes; i++) {
+
+				//Byte to retrieve the bit from
+				char byte = _data[i];
+
+				//Loops over every Bit in the Byte
+				for(unsigned int b = 0; b < CHAR_BIT; ++b){
+
+					//grabs the bit at the index of b and shifts it to the very right so it results in 0 if the bit is unset and 1 if its set
+					amount += (byte & (0b1 << b)) >> b;
+				}
 			}
 			return amount;
 		}
-
-		/*atyp::String toBase(unsigned int amount = 16) {
-			_STL_ASSERT(amount >= 2 && amount <= 64, "Invalid Base Amount")
-		}*/
 
 		modifier& operator[](unsigned int index){
 			return (*_mod)[index];
@@ -112,11 +125,13 @@ namespace atyp {
 		//if (!(std::is_integral<T>::value && std::is_unsigned<T>::value))throw "Type Must be a Unsigned Integral";
 		return (v << amount) | ((unsigned)v >> (-amount & (sizeof(T) * CHAR_BIT - 1)));
 	}
+
 	template<typename T>
 	T BitRotL(T v, unsigned char amount) {
 		//if (!(std::is_integral<T>::value && std::is_unsigned<T>::value))throw "Type Must be a Unsigned Integral";
 		return (v >> amount) | ((unsigned)v << (-amount & (sizeof(T) * CHAR_BIT - 1)));
-	}	
+	}
+
 	template<unsigned int bytes>
 	static std::bitset<bytes * 8> hearsum(const char* data, const unsigned int dLength) {
 		std::bitset<bytes* CHAR_BIT> hash = 0;

@@ -1,6 +1,6 @@
 #pragma once
-//#include <assert.h>
-#include <memory>
+#include <cmath>
+#include <cstdio>
 
 class Vector2{
 public:
@@ -17,7 +17,7 @@ public:
 	};
 
 	Vector2() {
-		memset(data, 0, sizeof(float) * 2);
+		data[0] = data[1] = 0;
 	}
 
 	Vector2(float a_x, float a_y) {
@@ -25,6 +25,13 @@ public:
 		y = a_y;
 	}
 
+#ifdef _CSTDIO_
+
+	void Print(){
+		printf("%.2f, %.2f\n", x, y);
+	}
+
+#endif // _CSTDIO_
 
 	Vector2 copy() const {
 		return Vector2(x, y);
@@ -44,6 +51,8 @@ public:
 
 	Vector2& normalise() {
 		float mag = magnitude();
+		if(mag == 0.0f)
+			throw "Cannot Divide by 0";
 		//assert(mag != 0.0f && "Magnitude is 0. Cannot Divide");
 		x /= mag;
 		y /= mag;

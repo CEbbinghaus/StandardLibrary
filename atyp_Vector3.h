@@ -72,6 +72,10 @@ public:
 		z = a_z;
 	}
 
+	void Print(){
+		printf("%.2f, %.2f, %.2f\n", x, y, z);
+	}
+
 	float magnitude() {
 		return sqrtf(x * x + y * y + z * z);
 	}
@@ -124,12 +128,14 @@ public:
 	Vector3& operator+=(const Vector3& rhs) {
 		x += rhs.x;
 		y += rhs.y;
+		z += rhs.z;
 		return *this;
 	}
 
 	Vector3& operator-=(const Vector3& rhs) {
 		x -= rhs.x;
 		y -= rhs.y;
+		z -= rhs.z;
 		return *this;
 	}
 

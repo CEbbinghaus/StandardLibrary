@@ -47,6 +47,10 @@ public:
 		w = a_w;
 	}
 
+	void Print(){
+		printf("%.2f, %.2f, %.2f, %.2f\n", x, y, z, w);
+	}
+
 	Vector4 copy() const {
 		return Vector4(x, y, z, w);
 	}

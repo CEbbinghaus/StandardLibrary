@@ -8,30 +8,26 @@
 
 class Transform{
 
+	Matrix4 globalMatrix;
+	Matrix4 localMatrix;
+
 public:
-	void updateLocalTransform(){
-		Matrix4 _pos;
-		Matrix4 _scale;
 
-		_pos.setPosition(Position.x, Position.y, Position.z);
-		_scale.setScale(Scale.x, Scale.y, Scale.z);
+	const Matrix4& updateTransform(){
+		Matrix4 _pos = Matrix4::FromPosition(Position);
+		Matrix4 _scale = Matrix4::FromScale(Scale);
 
-		localTransform = _pos * Rotation * _scale;
-	}
-
-	void updateGlobalTransform(){
-		updateLocalTransform();
+		localMatrix = _pos * Rotation * _scale;
 
 		if(Parent)
-			globalTransform = (Parent->globalTransform) * localTransform;
+			globalMatrix = (Parent->globalMatrix) * localMatrix;
 		else
-			globalTransform = localTransform;
+			globalMatrix = localMatrix;
+
+		return globalMatrix;
 	}
 
-	Matrix4 globalTransform;
-	Matrix4 localTransform;
-
-	static Transform* root;
+	//static Transform* root;
 
 	atyp::Array<Transform*> children;
 
@@ -52,7 +48,7 @@ public:
 	}
 
 	void SetParent(std::nullptr_t){
-		TransferParent(root);
+		TransferParent(nullptr);
 	}
 
 	Vector3 Position;
@@ -61,7 +57,6 @@ public:
 
 	Transform(){
 		Parent = nullptr;
-		SetParent(nullptr);
 		Position = Vector3(0.0f, 0.0f, 0.0f);
 		Scale = Vector3(1.0f, 1.0f, 1.0f);
 		Rotation = Quaternion();
@@ -69,17 +64,17 @@ public:
 
 	Transform(Matrix4 src){
 		Parent = nullptr;
-		SetParent(nullptr);
 		Position = Vector3(0.0f, 0.0f, 0.0f);
 		Scale = Vector3(1.0f, 1.0f, 1.0f);
 		Rotation = Quaternion();
-		globalTransform = src;
+
+		//TODO: Read out Position/Rotation/Scale out of the Matrix;
+		globalMatrix = src;
 	}
 
 
 	Transform(Vector3 position, Vector3 scale, Quaternion rotation){
 		Parent = nullptr;
-		SetParent(nullptr);
 		Position = position;
 		Scale = scale;
 		Rotation = rotation;
@@ -90,21 +85,21 @@ public:
 			Parent->children.remove(this);
 	}
 
-	Transform operator*(Transform& other){
-		return Transform(globalTransform * other.localTransform);
+	Vector3 right() {
+		return Rotation.toMatrix().XAxis;
 	}
 
-	Matrix4 operator*(Matrix4& other){
-		return Matrix4(globalTransform * other);
+	Vector3 up() {
+		return Rotation.toMatrix().YAxis;
+	}
+
+	Vector3 forward() {
+		return Rotation.toMatrix().ZAxis;
 	}
 
 	operator Matrix4(){
-		return globalTransform;
+		return globalMatrix;
 	}
 };
 
-Matrix4 operator*(Matrix4& lhs, Transform& rhs){
-	return Matrix4(lhs * rhs.globalTransform);
-}
-
-Transform* Transform::root = nullptr;
+//Transform* Transform::root = nullptr;

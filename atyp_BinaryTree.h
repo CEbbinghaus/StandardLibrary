@@ -29,6 +29,7 @@ namespace atyp {
 	//	//template <std::vector<int>>
 	//	//void doSomething(std::vector<int> * v)
 	//};
+	
 	class BinaryTree{
 		class Node{
 		public:
