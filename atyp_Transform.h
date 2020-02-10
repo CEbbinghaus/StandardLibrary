@@ -17,7 +17,8 @@ public:
 		Matrix4 _pos = Matrix4::FromPosition(Position);
 		Matrix4 _scale = Matrix4::FromScale(Scale);
 
-		localMatrix = _pos * Rotation * _scale;
+		//localMatrix = _pos * Rotation * _scale;
+		localMatrix = _scale * Rotation * _pos;
 
 		if(Parent)
 			globalMatrix = (Parent->globalMatrix) * localMatrix;

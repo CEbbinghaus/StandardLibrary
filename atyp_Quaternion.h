@@ -17,7 +17,6 @@ class Quaternion
 	};
 
 public:
-
 	Quaternion()
 	{
 		*this = Quaternion::identity();
@@ -38,7 +37,8 @@ public:
 
 	~Quaternion() {}
 
-	static Quaternion identity(){
+	static Quaternion identity()
+	{
 		return Quaternion(0, 0, 0, 1);
 	}
 
@@ -68,6 +68,15 @@ public:
 				   sy * cp * cr - cy * sp * sr,
 				   cy * cp * cr + sy * sp * sr)
 			.normalized();
+	}
+
+	static Quaternion aroundAngle(Vector3 direction, float rotation)
+	{
+		return Quaternion(
+			direction.x * sin(rotation / 2),
+			direction.y * sin(rotation / 2),
+			direction.z * sin(rotation / 2),
+			cos(rotation / 2));
 	}
 
 	static Quaternion euler(Vector3 euler)
@@ -100,8 +109,8 @@ public:
 			a.w * b.y - a.x * b.z - a.y * b.w - a.z * b.x,
 			a.w * b.z + a.x * b.y + a.y * b.x + a.z * b.w);
 	}
-	
-	Quaternion& operator*=(Quaternion b)
+
+	Quaternion &operator*=(Quaternion b)
 	{
 		Quaternion a = *this;
 
@@ -110,7 +119,7 @@ public:
 		this->z = a.w * b.y - a.x * b.z - a.y * b.w - a.z * b.x;
 		this->w = a.w * b.z + a.x * b.y + a.y * b.x + a.z * b.w;
 
-		return *this; 
+		return *this;
 	}
 
 	Matrix4 toMatrix()
@@ -132,11 +141,13 @@ public:
 		return a * b;
 	}
 
-	operator Matrix4(){
+	operator Matrix4()
+	{
 		return toMatrix();
 	}
 
-	Quaternion operator =(Vector3& rhs){
+	Quaternion operator=(Vector3 &rhs)
+	{
 		return *this = Quaternion::euler(rhs);
 	}
 };
