@@ -9,4 +9,12 @@ public:
         if(value > max)return max;
         return value;
     }
+
+    static const double PI() {
+        return 3.14156;
+    };
+
+    static const double TWO_PI() {
+        return PI() * 2;
+    };
 };
