@@ -37,6 +37,10 @@ public:
 
 	~Quaternion() {}
 
+	void Print(){
+		printf("X: %.4f, Y: %.4f, Z: %.4f, W: %.4f\n", x, y, z, w);
+	}
+
 	static Quaternion identity()
 	{
 		return Quaternion(0, 0, 0, 1);
@@ -69,15 +73,52 @@ public:
 				   cy * cp * cr + sy * sp * sr)
 			.normalized();
 	}
-
-	static Quaternion aroundAngle(Vector3 direction, float rotation)
+	
+	
+	static Quaternion ALTeuler(float x, float y, float z)
 	{
+		float yaw = x;
+		float pitch = y;
+		float roll = z;
+		float rollOver2 = roll * 0.5f;
+		float sinRollOver2 = sinf(rollOver2);
+		float cosRollOver2 = cosf(rollOver2);
+		float pitchOver2 = pitch * 0.5f;
+		float sinPitchOver2 = sinf(pitchOver2);
+		float cosPitchOver2 = cosf(pitchOver2);
+		float yawOver2 = yaw * 0.5f;
+		float sinYawOver2 = sinf(yawOver2);
+		float cosYawOver2 = cosf(yawOver2);
+
 		return Quaternion(
-			direction.x * sin(rotation / 2),
-			direction.y * sin(rotation / 2),
-			direction.z * sin(rotation / 2),
-			cos(rotation / 2));
+			cosYawOver2 * cosPitchOver2 * cosRollOver2 + sinYawOver2 * sinPitchOver2 * sinRollOver2,
+			cosYawOver2 * cosPitchOver2 * sinRollOver2 - sinYawOver2 * sinPitchOver2 * cosRollOver2,
+			cosYawOver2 * sinPitchOver2 * cosRollOver2 + sinYawOver2 * cosPitchOver2 * sinRollOver2,
+			sinYawOver2 * cosPitchOver2 * cosRollOver2 - cosYawOver2 * sinPitchOver2 * sinRollOver2
+		);
 	}
+
+	static Quaternion aroundAngle(Vector3 axis, float angle)
+	{
+		// Here we calculate the sin( theta / 2) once for optimization
+		double factor = sinf((float)angle / 2.0f);
+
+		// Calculate the x, y and z of the quaternion
+		double x = axis.x * factor;
+		double y = axis.y * factor;
+		double z = axis.z * factor;
+
+		// Calcualte the w value by cos( theta / 2 )
+		double w = cosf((float)angle / 2.0f);
+
+		return Quaternion(x, y, z, w).normalized();
+
+	}
+		//return Quaternion(
+		//	direction.x * sin(rotation / 2),
+		//	direction.y * sin(rotation / 2),
+		//	direction.z * sin(rotation / 2),
+		//	cos(rotation / 2));
 
 	static Quaternion euler(Vector3 euler)
 	{
@@ -110,7 +151,7 @@ public:
 			a.w * b.z + a.x * b.y + a.y * b.x + a.z * b.w);
 	}
 
-	Quaternion &operator*=(Quaternion b)
+	Quaternion& operator*=(Quaternion b)
 	{
 		Quaternion a = *this;
 

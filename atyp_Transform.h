@@ -30,7 +30,7 @@ public:
 
 	//static Transform* root;
 
-	atyp::Array<Transform*> children;
+	Array<Transform*> children;
 
 	Transform* Parent;
 
@@ -87,15 +87,15 @@ public:
 	}
 
 	Vector3 right() {
-		return Rotation.toMatrix().XAxis;
+		return globalMatrix.XAxis.normalise();
 	}
 
 	Vector3 up() {
-		return Rotation.toMatrix().YAxis;
+		return globalMatrix.YAxis.normalise();
 	}
 
 	Vector3 forward() {
-		return Rotation.toMatrix().ZAxis;
+		return globalMatrix.ZAxis.normalise();
 	}
 
 	operator Matrix4(){

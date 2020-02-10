@@ -147,6 +147,14 @@ public:
 		result.w = 0;
 		return  result;
 	}
+
+	Vector4& operator-() {
+		x = -x;
+		y = -y;
+		z = -z;
+		w = -w;
+		return *this;
+	}
 };
 
 inline Vector4 operator*(float lhs, Vector4 rhs) {
