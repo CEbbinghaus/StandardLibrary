@@ -75,30 +75,6 @@ public:
 				   cy * cp * cr + sy * sp * sr)
 			.normalized();
 	}
-	
-	
-	static Quaternion ALTeuler(float x, float y, float z)
-	{
-		float yaw = x;
-		float pitch = y;
-		float roll = z;
-		float rollOver2 = roll * 0.5f;
-		float sinRollOver2 = sinf(rollOver2);
-		float cosRollOver2 = cosf(rollOver2);
-		float pitchOver2 = pitch * 0.5f;
-		float sinPitchOver2 = sinf(pitchOver2);
-		float cosPitchOver2 = cosf(pitchOver2);
-		float yawOver2 = yaw * 0.5f;
-		float sinYawOver2 = sinf(yawOver2);
-		float cosYawOver2 = cosf(yawOver2);
-
-		return Quaternion(
-			cosYawOver2 * cosPitchOver2 * cosRollOver2 + sinYawOver2 * sinPitchOver2 * sinRollOver2,
-			cosYawOver2 * cosPitchOver2 * sinRollOver2 - sinYawOver2 * sinPitchOver2 * cosRollOver2,
-			cosYawOver2 * sinPitchOver2 * cosRollOver2 + sinYawOver2 * cosPitchOver2 * sinRollOver2,
-			sinYawOver2 * cosPitchOver2 * cosRollOver2 - cosYawOver2 * sinPitchOver2 * sinRollOver2
-		);
-	}
 
 	static Quaternion aroundAngle(Vector3 axis, float angle)
 	{
