@@ -61,8 +61,10 @@ public:
 	{
 		float cy = cosf(z * 0.5f);
 		float sy = sinf(z * 0.5f);
+
 		float cp = cosf(y * 0.5f);
 		float sp = sinf(y * 0.5f);
+
 		float cr = cosf(x * 0.5f);
 		float sr = sinf(x * 0.5f);
 
@@ -171,13 +173,15 @@ public:
 			q.w, q.z, -q.y, q.x,
 			-q.z, q.w, q.x, q.y,
 			q.y, -q.x, q.w, q.z,
-			-q.x, -q.y, -q.z, q.w);
+			-q.x, -q.y, -q.z, q.w
+		);
 
 		Matrix4 b = Matrix4(
 			q.w, q.z, -q.y, -q.x,
 			-q.z, q.w, q.x, -q.y,
 			q.y, -q.x, q.w, -q.z,
-			q.x, q.y, q.z, q.w);
+			q.x, q.y, q.z, q.w
+		);
 
 		return a * b;
 	}

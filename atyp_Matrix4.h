@@ -6,6 +6,39 @@
 
 class Matrix4
 {
+
+	float Get11() const { return data[0];	}
+	float Get12() const { return data[4];	}
+	float Get13() const { return data[8];	}
+	float Get14() const { return data[12];	}
+	float Get21() const { return data[1];	}
+	float Get22() const { return data[5];	}
+	float Get23() const { return data[9];	}
+	float Get24() const { return data[13];	}
+	float Get31() const { return data[2];	}
+	float Get32() const { return data[6];	}
+	float Get33() const { return data[10];	}
+	float Get34() const { return data[14];	}
+	float Get41() const { return data[3];	}
+	float Get42() const { return data[7];	}
+	float Get43() const { return data[11];	}
+	float Get44() const { return data[15];	}
+	void Set11(const float& val){ data[0]  = val; }
+	void Set12(const float& val){ data[4]  = val; }
+	void Set13(const float& val){ data[8]  = val; }
+	void Set14(const float& val){ data[12] = val; }
+	void Set21(const float& val){ data[1]  = val; }
+	void Set22(const float& val){ data[5]  = val; }
+	void Set23(const float& val){ data[9]  = val; }
+	void Set24(const float& val){ data[13] = val; }
+	void Set31(const float& val){ data[2]  = val; }
+	void Set32(const float& val){ data[6]  = val; }
+	void Set33(const float& val){ data[10] = val; }
+	void Set34(const float& val){ data[14] = val; }
+	void Set41(const float& val){ data[3]  = val; }
+	void Set42(const float& val){ data[7]  = val; }
+	void Set43(const float& val){ data[11] = val; }
+	void Set44(const float& val){ data[15] = val; }
 public:
 	union{
 		struct{
@@ -162,6 +195,169 @@ public:
 		return m;
 	}
 
+	Matrix4 Invert(){
+		Matrix4 inverse;
+		inverse.Set11(
+			Get22() * Get33() * Get44() -
+			Get22() * Get34() * Get43() -
+			Get32() * Get23() * Get44() +
+			Get32() * Get24() * Get43() +
+			Get42() * Get23() * Get34() -
+			Get42() * Get24() * Get33()
+		);
+
+		inverse.Set21(
+			-Get21() * Get33() * Get44() +
+			Get21() * Get34() * Get43() +
+			Get31() * Get23() * Get44() -
+			Get31() * Get24() * Get43() -
+			Get41() * Get23() * Get34() +
+			Get41() * Get24() * Get33()
+		);
+
+		inverse.Set31(
+			Get21() * Get32() * Get44() -
+			Get21() * Get34() * Get42() -
+			Get31() * Get22() * Get44() +
+			Get31() * Get24() * Get42() +
+			Get41() * Get22() * Get34() -
+			Get41() * Get24() * Get32()
+		);
+
+		inverse.Set41(
+			-Get21() * Get32() * Get43() 
+			+Get21() * Get33() * Get42()
+			+Get31() * Get22() * Get43()
+			-Get31() * Get23() * Get42()
+			-Get41() * Get22() * Get33()
+			+Get41() * Get23() * Get32()
+		);
+
+		inverse.Set12(
+			-Get12() * Get33() * Get44() +
+			Get12() * Get34() * Get43() +
+			Get32() * Get13() * Get44() -
+			Get32() * Get14() * Get43() -
+			Get42() * Get13() * Get34() +
+			Get42() * Get14() * Get33()
+		);
+
+		inverse.Set22(
+			Get11() * Get33() * Get44() -
+			Get11() * Get34() * Get43() -
+			Get31() * Get13() * Get44() +
+			Get31() * Get14() * Get43() +
+			Get41() * Get13() * Get34() -
+			Get41() * Get14() * Get33()
+		);
+
+		inverse.Set32(
+			-Get11() * Get32() * Get44() +
+			Get11() * Get34() * Get42() +
+			Get31() * Get12() * Get44() -
+			Get31() * Get14() * Get42() -
+			Get41() * Get12() * Get34() +
+			Get41() * Get14() * Get32()
+		);
+
+		inverse.Set42(
+			Get11() * Get32() * Get43() -
+			Get11() * Get33() * Get42() -
+			Get31() * Get12() * Get43() +
+			Get31() * Get13() * Get42() +
+			Get41() * Get12() * Get33() -
+			Get41() * Get13() * Get32()
+		);
+
+		inverse.Set13(
+			Get12() * Get23() * Get44() -
+			Get12() * Get24() * Get43() -
+			Get22() * Get13() * Get44() +
+			Get22() * Get14() * Get43() +
+			Get42() * Get13() * Get24() -
+			Get42() * Get14() * Get23()
+		);
+
+		inverse.Set23(
+			-Get11() * Get23() * Get44() +
+			Get11() * Get24() * Get43() +
+			Get21() * Get13() * Get44() -
+			Get21() * Get14() * Get43() -
+			Get41() * Get13() * Get24() +
+			Get41() * Get14() * Get23()
+		);
+
+		inverse.Set33(
+			Get11() * Get22() * Get44() -
+			Get11() * Get24() * Get42() -
+			Get21() * Get12() * Get44() +
+			Get21() * Get14() * Get42() +
+			Get41() * Get12() * Get24() -
+			Get41() * Get14() * Get22()
+		);
+
+		inverse.Set43(
+			-Get11() * Get22() * Get43() +
+			Get11() * Get23() * Get42() +
+			Get21() * Get12() * Get43() -
+			Get21() * Get13() * Get42() -
+			Get41() * Get12() * Get23() +
+			Get41() * Get13() * Get22()
+		);
+
+		inverse.Set14(
+			-Get12() * Get23() * Get34() +
+			Get12() * Get24() * Get33() +
+			Get22() * Get13() * Get34() -
+			Get22() * Get14() * Get33() -
+			Get32() * Get13() * Get24() +
+			Get32() * Get14() * Get23()
+		);
+
+		inverse.Set24(
+			Get11() * Get23() * Get34() -
+			Get11() * Get24() * Get33() -
+			Get21() * Get13() * Get34() +
+			Get21() * Get14() * Get33() +
+			Get31() * Get13() * Get24() -
+			Get31() * Get14() * Get23()
+		);
+
+		inverse.Set34(
+			-Get11() * Get22() * Get34() +
+			Get11() * Get24() * Get32() +
+			Get21() * Get12() * Get34() -
+			Get21() * Get14() * Get32() -
+			Get31() * Get12() * Get24() +
+			Get31() * Get14() * Get22()
+		);
+
+		inverse.Set44(
+			Get11() * Get22() * Get33() -
+			Get11() * Get23() * Get32() -
+			Get21() * Get12() * Get33() +
+			Get21() * Get13() * Get32() +
+			Get31() * Get12() * Get23() -
+			Get31() * Get13() * Get22()
+		);
+
+		float determinant =
+			Get11() * inverse.Get11() + Get12() * inverse.Get21() + Get13() * inverse.Get31() + Get14() * inverse.Get41();
+
+
+		if (determinant == 0)
+			return Matrix4();
+
+
+		float determinantInverse = 1.0f / determinant;
+
+		for (int i = 0; i < 16; i++)
+		{
+			inverse.data[i] *= determinantInverse;
+		}
+
+		return inverse;
+	}
 	void Print(){
 		for(int i = 0; i < 16; ++i){
 			if(i != 0 && (i % 4) == 0)printf("\n");
