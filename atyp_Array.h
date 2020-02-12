@@ -122,7 +122,7 @@ public:
 
 	//	Array<T>(Array<T>& Original)
 	//		Creates a copy of the Original
-	Array(Array<T>& original){
+	Array(const Array<T>& original){
 		adr = (T*)malloc(sizeof(T) * original.length);
 		memcpy(adr, original.data(), sizeof(T) * original.length);
 		m_size = length = original.length;
