@@ -38,6 +38,19 @@ public:
 		float data[3];
 	};
 
+	static Vector3 FaceNormal(Vector3 a, Vector3 b, Vector3 c){
+		return Vector3::cross(b - a, c - a);
+	}
+
+	static Vector3 cross(const Vector3& a, const Vector3& b){
+		return Vector3(
+			a.y * b.z - a.z * b.y,
+			a.z * b.x - a.x * b.z,
+			a.x * b.y - a.y * b.x
+		);
+	}
+
+
 	static Vector3 one() {
 		return Vector3(1.0, 1.0, 1.0);
 	}
