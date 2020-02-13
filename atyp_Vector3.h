@@ -74,6 +74,16 @@ public:
 	Vector3() {
 		x = y = z = 0;
 	}
+	
+	Vector3(float s) {
+		x = y = z = s;
+	}
+	
+	Vector3(Vector2 v, float s) {
+		x = v.x;
+		y = v.y;
+		z = s;
+	}
 
 	Vector3(float* ptr) {
 		memcpy(data, ptr, sizeof(float) * 3);

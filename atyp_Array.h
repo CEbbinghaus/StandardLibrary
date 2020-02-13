@@ -124,15 +124,15 @@ public:
 	//		Creates a copy of the Original
 	Array(const Array<T>& original){
 		adr = (T*)malloc(sizeof(T) * original.length);
-		memcpy(adr, original.data(), sizeof(T) * original.length);
+		memcpy(adr, original.adr, sizeof(T) * original.length);
 		m_size = length = original.length;
 	}
 
 	//	Array<T>(Array<T>&& Original)
-	//		Creates a copy of the Original
-	Array(Array<T>&& original){
-		adr = (T*)malloc(sizeof(T) * original.length);
-		memcpy(adr, original.data(), sizeof(T) * original.length);
+	//		Moves the Original
+	Array(Array<T>&& original) noexcept{
+		adr = original.adr;
+		original.adr = nullptr;
 		m_size = length = original.length;
 	}
 
@@ -489,7 +489,7 @@ public:
 
 	// void Array<T>::push(T Element)
 	//		Pushes an Element onto the Back of an Array
-	void push(T element) {
+	void push(const T& element) {
 		increase();
 		memcpy(adr + (length), &element, sizeof(T));
 		++length;
