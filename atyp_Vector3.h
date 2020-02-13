@@ -180,6 +180,14 @@ public:
 		return *this;
 	}
 
+	bool operator==(const Vector3& b) {
+		bool xEquality = x == b.x;
+		bool yEquality = y == b.y;
+		bool zEquality = z == b.z;
+
+		return (xEquality && yEquality && zEquality);
+	}
+
 	float& operator[](int index) {
 		return *((float*)this + index);
 	}
