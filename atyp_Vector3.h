@@ -3,9 +3,11 @@
 #include "atyp_Vector2.h"
 
 class Quaternion;
-
-class Vector3
-{
+template <
+	typename T = float,
+	std::enable_if<std::is_arithmetic_v<T>, T> * = nullptr
+>
+class Vector3{
 public:
 	enum class position{
 		x,
@@ -13,37 +15,37 @@ public:
 		z
 	};
 
-	union {
+	union{
 		struct{
-			float x, y, z;
+			T x, y, z;
 		};
-		struct {
-			float x, y, z;
+		struct{
+			T x, y, z;
 		} pos;
-		struct {
-			float r, g, b;
+		struct{
+			T r, g, b;
 		} colRGB;
-		struct {
-			float s, t, q;
-		} ;
-		struct {
-			float u, v, w;
+		struct{
+			T s, t, q;
+		};
+		struct{
+			T u, v, w;
 		} textcoord;
-		struct {
-			float h, s;
-			union {
-				float l, v;
+		struct{
+			T h, s;
+			union{
+				T l, v;
 			};
 		} colHSL;
-		float data[3];
+		T data[3];
 	};
 
-	static Vector3 FaceNormal(Vector3 a, Vector3 b, Vector3 c){
-		return Vector3::cross(b - a, c - a);
+	static Vector3<T> FaceNormal(Vector3<T> a, Vector3<T> b, Vector3<T> c){
+		return Vector3<T>::cross(b - a, c - a);
 	}
 
-	static Vector3 cross(const Vector3& a, const Vector3& b){
-		return Vector3(
+	static Vector3<T> cross(const Vector3<T>& a, const Vector3<T>& b){
+		return Vector3<T>(
 			a.y * b.z - a.z * b.y,
 			a.z * b.x - a.x * b.z,
 			a.x * b.y - a.y * b.x
@@ -51,45 +53,45 @@ public:
 	}
 
 
-	static Vector3 one() {
-		return Vector3(1.0, 1.0, 1.0);
-	}
-	
-	static Vector3 zero() {
-		return Vector3(0.0, 0.0, 0.0);
+	static Vector3<T> one(){
+		return Vector3<T>(1.0, 1.0, 1.0);
 	}
 
-	static Vector3 right() {
-		return Vector3(1, 0.0, 0.0);
+	static Vector3<T> zero(){
+		return Vector3<T>(0.0, 0.0, 0.0);
 	}
 
-	static Vector3 up() {
-		return Vector3(0.0, 1, 0.0);
+	static Vector3<T> right(){
+		return Vector3<T>(1, 0.0, 0.0);
 	}
 
-	static Vector3 forward() {
-		return Vector3(0.0, 0.0, 1);
+	static Vector3<T> up(){
+		return Vector3<T>(0.0, 1, 0.0);
 	}
 
-	Vector3() {
-		x = y = z = 0;
+	static Vector3<T> forward(){
+		return Vector3<T>(0.0, 0.0, 1);
 	}
-	
-	Vector3(float s) {
+
+	Vector3(){
+		x = y = z = T(0);
+	}
+
+	Vector3(T s){
 		x = y = z = s;
 	}
-	
-	Vector3(Vector2 v, float s) {
+
+	Vector3(Vector2 v, T s){
 		x = v.x;
 		y = v.y;
 		z = s;
 	}
 
-	Vector3(float* ptr) {
-		memcpy(data, ptr, sizeof(float) * 3);
+	Vector3(T* ptr){
+		memcpy(data, ptr, sizeof(T) * 3);
 	}
 
-	Vector3(float a_x, float a_y, float a_z) {
+	Vector3(T a_x, T a_y, T a_z){
 		x = a_x;
 		y = a_y;
 		z = a_z;
@@ -99,98 +101,98 @@ public:
 		printf("%.2f, %.2f, %.2f\n", x, y, z);
 	}
 
-	float magnitude() {
-		return sqrtf(x * x + y * y + z * z);
+	T magnitude(){
+		return sqrt(x * x + y * y + z * z);
 	}
 
-	float magnitudeSqr() {
+	T magnitudeSqr(){
 		return x * x + y * y + z * z;
 	}
 
-	Vector3& normalise() {
-		float mag = magnitude();
+	Vector3<T>& normalise(){
+		T mag = magnitude();
 		x /= mag;
 		y /= mag;
 		z /= mag;
 		return *this;
 	}
 
-	float dot(const Vector3& rhs) {
+	T dot(const Vector3<T>& rhs){
 		return (x * rhs.x + y * rhs.y + z * rhs.z);
 	}
 
-	Vector3 copy() const {
-		return Vector3(x, y, z);
+	Vector3<T> copy() const{
+		return Vector3<T>(x, y, z);
 	}
 
-	Vector3 operator+(const Vector3& rhs) {
-		return Vector3(x + rhs.x, y + rhs.y, z + rhs.z);
+	Vector3<T> operator+(const Vector3<T>& rhs){
+		return Vector3<T>(x + rhs.x, y + rhs.y, z + rhs.z);
 	}
 
-	Vector3 operator-(const Vector3& rhs) {
-		return Vector3(x - rhs.x, y - rhs.y, z - rhs.z);
+	Vector3<T> operator-(const Vector3<T>& rhs){
+		return Vector3<T>(x - rhs.x, y - rhs.y, z - rhs.z);
 	}
 
-	Vector3 operator*(float rhs) {
-		return Vector3(x * rhs, y * rhs, z * rhs);
-	}
-	
-	Vector3 operator*(Vector3 rhs) {
-		return Vector3(x * rhs.x, y * rhs.y, z * rhs.z);
+	Vector3<T> operator*(T rhs){
+		return Vector3<T>(x * rhs, y * rhs, z * rhs);
 	}
 
-	Vector3 operator/(float rhs) {
-		return Vector3(x / rhs, y / rhs, z / rhs);
+	Vector3<T> operator*(Vector3<T> rhs){
+		return Vector3<T>(x * rhs.x, y * rhs.y, z * rhs.z);
 	}
-	
-	Vector3 operator/(Vector3 rhs) {
-		return Vector3(x / rhs.x, y / rhs.y, z / rhs.z);
+
+	Vector3<T> operator/(T rhs){
+		return Vector3<T>(x / rhs, y / rhs, z / rhs);
+	}
+
+	Vector3<T> operator/(Vector3<T> rhs){
+		return Vector3<T>(x / rhs.x, y / rhs.y, z / rhs.z);
 	}
 
 
-	Vector3& operator+=(const Vector3& rhs) {
+	Vector3<T>& operator+=(const Vector3<T>& rhs){
 		x += rhs.x;
 		y += rhs.y;
 		z += rhs.z;
 		return *this;
 	}
 
-	Vector3& operator-=(const Vector3& rhs) {
+	Vector3<T>& operator-=(const Vector3<T>& rhs){
 		x -= rhs.x;
 		y -= rhs.y;
 		z -= rhs.z;
 		return *this;
 	}
 
-	Vector3& operator*=(float rhs) {
+	Vector3<T>& operator*=(T rhs){
 		x *= rhs;
 		y *= rhs;
 		z *= rhs;
 		return *this;
 	}
 
-	Vector3& operator*=(Vector3 rhs) {
+	Vector3<T>& operator*=(Vector3<T> rhs){
 		x *= rhs.x;
 		y *= rhs.y;
 		z *= rhs.z;
 		return *this;
 	}
 
-	Vector3& operator/=(float rhs) {
+	Vector3<T>& operator/=(T rhs){
 		x /= rhs;
 		y /= rhs;
 		z /= rhs;
 		return *this;
 	}
 
-	Vector3& operator/=(Vector3 rhs) {
+	Vector3<T>& operator/=(Vector3<T> rhs){
 		x /= rhs.x;
 		y /= rhs.y;
 		z /= rhs.z;
 		return *this;
 	}
 
-	bool operator==(const Vector3& b) {
+	bool operator==(const Vector3<T>& b){
 		bool xEquality = x == b.x;
 		bool yEquality = y == b.y;
 		bool zEquality = z == b.z;
@@ -198,34 +200,37 @@ public:
 		return (xEquality && yEquality && zEquality);
 	}
 
-	float& operator[](int index) {
-		return *((float*)this + index);
+	T& operator[](int index){
+		return *((T*)this + index);
 	}
 
-	operator float* () {
-		return (float*)this;
+	operator T* (){
+		return (T*)this;
 	}
 
-	operator Vector2() {
-		return Vector2(x, y);
+	operator Vector2<T>(){
+		return Vector2<T>(x, y);
 	}
 
-	Vector3 cross(const Vector3& other){
-		return Vector3(
+	Vector3<T> cross(const Vector3<T>& other){
+		return Vector3<T>(
 			y * other.z - z * other.y,
 			z * other.x - x * other.z,
 			x * other.y - y * other.x
 		);
 	}
 
-	Vector3& operator-(){
+	Vector3<T>& operator-(){
 		x = -x;
 		y = -y;
 		z = -z;
 		return *this;
 	}
 };
-
-inline Vector3 operator*(const float n, const Vector3& rhs){
-	return Vector3(rhs.x * n, rhs.y * n, rhs.z * n);
+template <
+	typename T = float,
+	std::enable_if<std::is_arithmetic_v<T>, T> * = nullptr
+>
+inline Vector3<T> operator*(const T n, const Vector3<T>& rhs){
+	return Vector3<T>(rhs.x * n, rhs.y * n, rhs.z * n);
 }

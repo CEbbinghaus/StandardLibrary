@@ -3,6 +3,10 @@
 #include "atyp_Vector3.h"
 #include <memory>
 
+template <
+	typename T = float,
+	std::enable_if<std::is_arithmetic_v<T>, T> * = nullptr
+>
 class Vector4
 {
 public:
@@ -15,16 +19,16 @@ public:
 
 	union{
 		struct {
-			float x, y, z, w;
+			T x, y, z, w;
 		};
-		float data[4];
+		T data[4];
 	};
 
 	Vector4() {
-		x = y = z = w = 0;
+		x = y = z = w = T(0);
 	}
 
-	Vector4(Vector2 v, float z, float w) {
+	Vector4(Vector2<T> v, T z, T w) {
 		x = v.x;
 		y = v.y;
 		
@@ -32,7 +36,7 @@ public:
 		this->w = w;
 	}
 
-	Vector4(Vector3 v, float w) {
+	Vector4(Vector3<T> v, T w) {
 		x = v.x;
 		y = v.y;
 		z = v.z;
@@ -40,7 +44,7 @@ public:
 		this->w = w;
 	}
 
-	Vector4(float a_x, float a_y, float a_z, float a_w) {
+	Vector4(T a_x, T a_y, T a_z, T a_w) {
 		x = a_x;
 		y = a_y;
 		z = a_z;
@@ -51,20 +55,20 @@ public:
 		printf("%.2f, %.2f, %.2f, %.2f\n", x, y, z, w);
 	}
 
-	Vector4 copy() const {
-		return Vector4(x, y, z, w);
+	Vector4<T> copy() const {
+		return Vector4<T>(x, y, z, w);
 	}
 
-	float magnitude() {
+	T magnitude() {
 		return sqrtf(x * x + y * y + z * z + w + w);
 	}
 
-	float magnitudeSqr() {
+	T magnitudeSqr() {
 		return x * x + y * y + z * z + w + w;
 	}
 
-	Vector4& normalise() {
-		float mod = magnitude();
+	Vector4<T>& normalise() {
+		T mod = magnitude();
 		x /= mod;
 		y /= mod;
 		z /= mod;
@@ -72,28 +76,28 @@ public:
 		return *this;
 	}
 
-	float dot(const Vector4& rhs) {
+	T dot(const Vector4<T>& rhs) {
 		return x * rhs.x + y * rhs.y + z * rhs.z + w * rhs.w;
 	}
 
-	Vector4 operator+(const Vector4& rhs) {
-		return Vector4(x + rhs.x, y + rhs.y, z + rhs.z, w + rhs.w);
+	Vector4<T> operator+(const Vector4<T>& rhs) {
+		return Vector4<T>(x + rhs.x, y + rhs.y, z + rhs.z, w + rhs.w);
 	}
 
-	Vector4 operator-(const Vector4& rhs) {
-		return Vector4(x - rhs.x, y - rhs.y, z - rhs.z, w - rhs.w);
+	Vector4<T> operator-(const Vector4<T>& rhs) {
+		return Vector4<T>(x - rhs.x, y - rhs.y, z - rhs.z, w - rhs.w);
 	}
 
-	Vector4 operator*(float rhs) {
-		return Vector4(x * rhs, y * rhs, z * rhs, w * rhs);
+	Vector4<T> operator*(T rhs) {
+		return Vector4<T>(x * rhs, y * rhs, z * rhs, w * rhs);
 	}
 
-	Vector4 operator/(float rhs) {
-		return Vector4(x / rhs, y / rhs, z / rhs, w / rhs);
+	Vector4<T> operator/(T rhs) {
+		return Vector4<T>(x / rhs, y / rhs, z / rhs, w / rhs);
 	}
 
 
-	Vector4& operator+=(const Vector4& rhs) {
+	Vector4<T>& operator+=(const Vector4<T>& rhs) {
 		x += rhs.x;
 		y += rhs.y;
 		z += rhs.z;
@@ -101,7 +105,7 @@ public:
 		return *this;
 	}
 
-	Vector4& operator-=(const Vector4& rhs) {
+	Vector4<T>& operator-=(const Vector4<T>& rhs) {
 		x -= rhs.x;
 		y -= rhs.y;
 		z -= rhs.z;
@@ -109,7 +113,7 @@ public:
 		return *this;
 	}
 
-	Vector4& operator*=(float rhs) {
+	Vector4<T>& operator*=(T rhs) {
 		x *= rhs;
 		y *= rhs;
 		z *= rhs;
@@ -117,7 +121,7 @@ public:
 		return *this;
 	}
 
-	Vector4& operator/=(float rhs) {
+	Vector4<T>& operator/=(T rhs) {
 		x /= rhs;
 		y /= rhs;
 		z /= rhs;
@@ -125,30 +129,30 @@ public:
 		return *this;
 	}
 
-	float& operator[](int index) {
-		return *((float*)this + index);
+	T& operator[](int index) {
+		return *((T*)this + index);
 	}
 
-	operator float* () {
-		return (float*)this;
+	operator T* () {
+		return (T*)this;
 	}
 	
-	operator Vector3() {
+	operator Vector3<T>() {
 		return Vector3(x, y, z);
 	}
 	
-	operator Vector2() {
+	operator Vector2<T>() {
 		return Vector2(x, y);
 	}
 
-	Vector4 cross(const Vector4& rhs) {
-		Vector4 result(*this);
+	Vector4<T> cross(const Vector4<T>& rhs) {
+		Vector4<T> result(*this);
 		*((Vector3*)& result) = (*((Vector3*)& result)).cross(*((Vector3*)& rhs));
 		result.w = 0;
 		return  result;
 	}
 
-	Vector4& operator-() {
+	Vector4<T>& operator-() {
 		x = -x;
 		y = -y;
 		z = -z;
@@ -157,6 +161,10 @@ public:
 	}
 };
 
-inline Vector4 operator*(float lhs, Vector4 rhs) {
-	return Vector4(rhs.x * lhs, rhs.y * lhs, rhs.z * lhs, rhs.w * lhs);
+template <
+	typename T = float,
+	std::enable_if<std::is_arithmetic_v<T>, T> * = nullptr
+>
+inline Vector4<T> operator*(T lhs, Vector4<T> rhs) {
+	return Vector4<T>(rhs.x * lhs, rhs.y * lhs, rhs.z * lhs, rhs.w * lhs);
 }

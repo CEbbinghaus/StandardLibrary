@@ -2,7 +2,12 @@
 #include <cmath>
 #include <cstdio>
 
+template <
+	typename T = float,
+	std::enable_if<std::is_arithmetic_v<T>, T> * = nullptr
+>
 class Vector2{
+
 public:
 	enum class position{
 		x,
@@ -11,16 +16,16 @@ public:
 
 	union{
 		struct{
-			float x, y;
+			T x, y;
 		};
-		float data[2];
+		T data[2];
 	};
 
 	Vector2() {
 		data[0] = data[1] = 0;
 	}
 
-	Vector2(float a_x, float a_y) {
+	Vector2(T a_x, T a_y) {
 		x = a_x;
 		y = a_y;
 	}
@@ -41,16 +46,16 @@ public:
 		return Vector2(-x, -y);
 	}
 
-	float magnitude() {
-		return sqrtf(x * x + y * y);
+	T magnitude() {
+		return sqrt(x * x + y * y);
 	}
 
-	float magnitudeSqr() {
+	T magnitudeSqr() {
 		return x * x + y * y;
 	}
 
 	Vector2& normalise() {
-		float mag = magnitude();
+		T mag = magnitude();
 		if(mag == 0.0f)
 			throw "Cannot Divide by 0";
 		//assert(mag != 0.0f && "Magnitude is 0. Cannot Divide");
@@ -59,7 +64,7 @@ public:
 		return *this;
 	}
 
-	float dot(const Vector2& rhs) {
+	T dot(const Vector2& rhs) {
 		return x * rhs.x + y * rhs.y;
 	}
 
@@ -75,11 +80,11 @@ public:
 		return Vector2(x - rhs.x, y - rhs.y);
 	}
 
-	Vector2 operator*(float rhs) {
+	Vector2 operator*(T rhs) {
 		return Vector2(x * rhs, y * rhs);
 	}
 
-	Vector2 operator/(float rhs) {
+	Vector2 operator/(T rhs) {
 		return Vector2(x / rhs, y / rhs);
 	}
 
@@ -95,27 +100,31 @@ public:
 		return *this;
 	}
 
-	Vector2& operator*=(float rhs) {
+	Vector2& operator*=(T rhs) {
 		x *= rhs;
 		y *= rhs;
 		return *this;
 	}
 
-	Vector2& operator/=(float rhs) {
+	Vector2& operator/=(T rhs) {
 		x /= rhs;
 		y /= rhs;
 		return *this;
 	}
 
-	float& operator[](int index) {
-		return *((float*)this + index);
+	T& operator[](int index) {
+		return *((T*)this + index);
 	}
 
-	operator float* () {
-		return (float*)this;
+	operator T* () {
+		return (T*)this;
 	}
 };
 
-inline Vector2 operator*(float lhs, Vector2 rhs) {
+template <
+	typename T = float,
+	std::enable_if<std::is_arithmetic_v<T>, T> * = nullptr
+>
+inline Vector2<T> operator*(T lhs, Vector2<T> rhs) {
 	return Vector2(rhs.x * lhs, rhs.y * lhs);
 }
