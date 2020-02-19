@@ -69,7 +69,7 @@ protected:
 	public:
 
 		T* current;
-		int index;
+		size_t index;
 
 		Iterator(T* ptr) : current(ptr){
 			index = 0;
@@ -263,7 +263,7 @@ public:
 	//	void Array<T>::forEach(function(T Element, int Index) => void)
 	//		loops over every Element of the Array and calls a function on that element
 	//		Deprechiated: Use "for(T& : Array<T>)" instead
-	void forEach(std::function<void(T element, int i)> func){
+	void forEach(std::function<void(T& element, int i)> func){
 		for(int i = 0; i < length; i++){
 			func(adr[i], i);
 		}
