@@ -16,8 +16,28 @@ public:
 		float data[2];
 	};
 
+	static Vector2 up() {
+		return Vector2(0.0f, 1.0f);
+	}
+
+	static Vector2 right() {
+		return Vector2(1.0f, 0.0f);
+	}
+
+	static Vector2 one() {
+		return Vector2(1.0f);
+	}
+
+	static Vector2 zero() {
+		return Vector2(0.0f);
+	}
+
 	Vector2() {
 		data[0] = data[1] = 0;
+	}
+
+	Vector2(float v) {
+		data[0] = data[1] = v;
 	}
 
 	Vector2(float a_x, float a_y) {
@@ -61,10 +81,6 @@ public:
 
 	float dot(const Vector2& rhs) {
 		return x * rhs.x + y * rhs.y;
-	}
-
-	Vector2 right() {
-		return Vector2(y, -x);
 	}
 
 	Vector2 operator+(const Vector2& rhs) {

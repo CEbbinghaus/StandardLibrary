@@ -1,7 +1,7 @@
 #pragma once
 #include <type_traits>
 
-static class Math{
+class Math{
 public:
     template <typename T, typename std::enable_if<std::is_arithmetic<T>::value>::type* = nullptr>
     static T clamp(T value, T min, T max){
@@ -9,12 +9,12 @@ public:
         if(value > max)return max;
         return value;
     }
-
+ 
     static const double PI() {
         return 3.14156;
     };
 
-    static const double TWO_PI() {
+    static const double TAO() {
         return PI() * 2;
     };
 };

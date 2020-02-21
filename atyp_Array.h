@@ -260,35 +260,64 @@ public:
 		return length == 0;
 	}
 
-	//	void Array<T>::forEach(function(T Element, int Index) => void)
+
+	//	Array<T> Array<T>::forEach(function() => void)
 	//		loops over every Element of the Array and calls a function on that element
-	//		Deprechiated: Use "for(T& : Array<T>)" instead
+	void forEach(std::function<void()> func) {
+		for (int i = 0; i < length; i++) {
+			func();
+		}
+	}
+
+	//	Array<T> Array<T>::forEach(function(const T& Element) => void)
+	//		loops over every Element of the Array and calls a function on that element
+	void forEach(std::function<void(T& element)> func) {
+		for (int i = 0; i < length; i++) {
+			func(adr[i]);
+		}
+	}
+
+	//	Array<T> Array<T>::forEach(function(const T& Element, int Index) => void)
+	//		loops over every Element of the Array and calls a function on that element
 	void forEach(std::function<void(T& element, int i)> func){
 		for(int i = 0; i < length; i++){
 			func(adr[i], i);
 		}
 	}
 
-	//	Array<T> Array<T>::map(function(T Element, int Index) => T result)
-	//		Loops over every element Creates a new Array from the Values
-	Array<T> map(std::function<T(T element, int i)> func){
-		Array<T> res(length);
-		for(int i = 0; i < length; i++){
-			res[i] = func(adr[i], i);
+	//	Array<nT> Array<T>::map(function() => nT result)
+	//		Creates a new Array of type nT and fills it with values returned by the function
+	template<typename nT>
+	Array<nT> map(std::function<nT()> func) {
+		Array<nT> res(length);
+		for (int i = 0; i < length; i++) {
+			res[i] = func();
 		}
 		return res;
 	}
 
-	//	Array<nT> Array<T>::map(function(T Element, int Index) => nT result)
-	//		Creates a new Array of type nT and fills it with a value decided by the function
+	//	Array<nT> Array<T>::map(function(const T& Element) => nT result)
+	//		Creates a new Array of type nT and fills it with values returned by the function
 	template<typename nT>
-	Array<nT> map(std::function<nT(T element, int i)> func){
+	Array<nT> map(std::function<nT(const T & element)> func) {
+		Array<nT> res(length);
+		for (int i = 0; i < length; i++) {
+			res[i] = func(adr[i]);
+		}
+		return res;
+	}
+
+	//	Array<nT> Array<T>::map(function(const T& Element, int Index) => nT result)
+	//		Creates a new Array of type nT and fills it with values returned by the function
+	template<typename nT>
+	Array<nT> map(std::function<nT(const T& element, int i)> func){
 		Array<nT> res(length);
 		for(int i = 0; i < length; i++){
 			res[i] = func(adr[i], i);
 		}
 		return res;
 	}
+
 
 	//	Array<T> Array<T>::copy()
 	//		Returns a Copy of the Array
