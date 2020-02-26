@@ -1,6 +1,6 @@
 #pragma once
 #include "atyp_Vector2.h"
-#include "atyp_Vector3.h"
+#include "atyp_Vector4.h"
 #include <memory>
 
 class Vector4
@@ -20,6 +20,28 @@ public:
 		float data[4];
 	};
 
+	
+	static Vector4 one() {
+		return Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+	}
+	
+	static Vector4 zero() {
+		return Vector4(0.0, 0.0, 0.0, 0.0f);
+	}
+
+	static Vector4 right() {
+		return Vector4(1, 0.0, 0.0, 0.0f);
+	}
+
+	static Vector4 up() {
+		return Vector4(0.0f, 1.0f, 0.0f, 0.0f);
+	}
+
+	static Vector4 forward() {
+		return Vector4(0.0, 0.0, 1, 0.0f);
+	}
+
+
 	Vector4() {
 		x = y = z = w = 0;
 	}
@@ -32,7 +54,7 @@ public:
 		this->w = w;
 	}
 
-	Vector4(Vector3 v, float w) {
+	Vector4(Vector4 v, float w) {
 		x = v.x;
 		y = v.y;
 		z = v.z;
@@ -143,7 +165,7 @@ public:
 
 	Vector4 cross(const Vector4& rhs) {
 		Vector4 result(*this);
-		*((Vector3*)& result) = (*((Vector3*)& result)).cross(*((Vector3*)& rhs));
+		*((Vector4*)& result) = (*((Vector4*)& result)).cross(*((Vector4*)& rhs));
 		result.w = 0;
 		return  result;
 	}

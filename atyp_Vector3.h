@@ -52,7 +52,7 @@ public:
 
 
 	static Vector3 one() {
-		return Vector3(1.0, 1.0, 1.0);
+		return Vector3(1.0f, 1.0f, 1.0f);
 	}
 	
 	static Vector3 zero() {
@@ -64,7 +64,7 @@ public:
 	}
 
 	static Vector3 up() {
-		return Vector3(0.0, 1, 0.0);
+		return Vector3(0.0f, 1.0f, 0.0f);
 	}
 
 	static Vector3 forward() {
