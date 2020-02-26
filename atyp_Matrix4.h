@@ -14,23 +14,6 @@
 
 class Matrix4
 {
-
-	//float data[0] const { return data[0];	}
-	//float data[4] const { return data[4];	}
-	//float data[8] const { return data[8];	}
-	//float data[12] const { return data[12];	}
-	//float data[1] const { return data[1];	}
-	//float data[5] const { return data[5];	}
-	//float data[9] const { return data[9];	}
-	//float data[13] const { return data[13];	}
-	//float data[2] const { return data[2];	}
-	//float data[6] const { return data[6];	}
-	//float data[10] const { return data[10];	}
-	//float data[14] const { return data[14];	}
-	//float data[3] const { return data[3];	}
-	//float data[7] const { return data[7];	}
-	//float data[11] const { return data[11];	}
-	//float data[15] const { return data[15];	}
 	void Set11(const float& val){ data[0]  = val; }
 	void Set12(const float& val){ data[4]  = val; }
 	void Set13(const float& val){ data[8]  = val; }

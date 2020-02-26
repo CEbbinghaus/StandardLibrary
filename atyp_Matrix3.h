@@ -121,4 +121,56 @@ public:
 		data[2] = -sin;
 		data[8] = cos;
 	}
+
+	Matrix3 Transposed(){
+		return Matrix3(data[0], data[3], data[6],
+					   data[1], data[4], data[7],
+					   data[2], data[5], data[8]);
+	}
+
+	static Matrix3 Inverse(const Matrix3& v){
+		Matrix3 inv;
+
+		//	0, 3, 6
+		//	1, 4, 7
+		//	2, 5, 8
+
+		//Calculate the matrix of minors
+		 inv.data[0] = ((v.data[4] * v.data[8]) - (v.data[7] * v.data[5]));
+		 inv.data[1] = ((v.data[3] * v.data[8]) - (v.data[6] * v.data[5]));
+		 inv.data[2] = ((v.data[3] * v.data[7]) - (v.data[6] * v.data[4]));
+
+		 inv.data[3] = ((v.data[1] * v.data[8]) - (v.data[7] * v.data[2]));
+		 inv.data[4] = ((v.data[0] * v.data[8]) - (v.data[6] * v.data[2]));
+		 inv.data[5] = ((v.data[0] * v.data[7]) - (v.data[6] * v.data[1]));
+
+		 inv.data[6] = ((v.data[1] * v.data[5]) - (v.data[4] * v.data[2]));
+		 inv.data[7] = ((v.data[0] * v.data[5]) - (v.data[3] * v.data[2]));
+		 inv.data[8] = ((v.data[0] * v.data[4]) - (v.data[3] * v.data[1]));
+
+		//Calculate the matrix of cofactors
+		 inv.data[1] *= -1;
+		 inv.data[3] *= -1;
+		 inv.data[5] *= -1;
+		 inv.data[7] *= -1;
+
+		//Calculate the determinant
+		float det = (v.data[0] *  inv.data[0]) + (v.data[3] *  inv.data[3]) + (v.data[6] *  inv.data[6]);
+		if(det == 0.0f){
+			return Matrix3();
+		}
+
+		//Calculate the adjugate of the matrix
+		inv = inv.Transposed();
+
+		//Multiply the adjugate and the determinant reciprocal
+		float inverseDeterminant = (1 / det);
+
+		for (int i = 0; i < 9; i++)
+		{
+			inv.data[i] *= inverseDeterminant;
+		}
+
+		return inv;
+	}
 };
