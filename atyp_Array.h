@@ -19,6 +19,8 @@ isEmpty			empty() �return a Boolean, true if the list is empty, false otherwis
 clear			clear() �remove all elements from the list
 */
 
+using uint = unsigned int;
+
 //Array<T>
 //Dynamic Array of type T
 //Example:
@@ -95,7 +97,7 @@ protected:
 public:
 
 	//length of the Array. Can be Decreased to Shorten an array
-	unsigned int length;
+	uint length;
 
 	//	Array<T>()
 	//		Default Constructor with no Data
@@ -110,6 +112,7 @@ public:
 	Array(int size){
 		length = m_size = size;
 		adr = (T*)malloc(sizeof(T) * size);
+		memset(adr, 0, sizeof(T) * size);
 	}
 
 	//	Array<T>(std::initializer_list<T> values)
@@ -121,7 +124,7 @@ public:
 	}
 
 	//	Array<T>(Array<T>& Original)
-	//		Creates a copy of the Original
+	//		Copy Constructor
 	Array(const Array<T>& original){
 		adr = (T*)malloc(sizeof(T) * original.length);
 		memcpy(adr, original.adr, sizeof(T) * original.length);
@@ -129,45 +132,55 @@ public:
 	}
 
 	//	Array<T>(Array<T>&& Original)
-	//		Moves the Original
+	//		Move Constructor
 	Array(Array<T>&& original) noexcept{
 		adr = original.adr;
 		original.adr = nullptr;
-		m_size = length = original.length;
+		m_size = original.m_size;
+		length = original.length;
 	}
 
 	//	~Array<T>() 
 	//		Deconstructs the Array
 	~Array(){
-		free(adr);
+		if(adr != nullptr)
+			free(adr);
 		adr = nullptr;
 	}
 
-	//	Array<T>[unsigned int Index]
+	//  T& Array<T>[uint Index]
 	//		Returns the Value at a certain Index of the Array
-	T& operator[] (unsigned int i){
+	T& operator[](uint i){
 		//assert(i < length && length > 0 && i >= 0);
 		if(i >= length)throw "Trying to Access Data outside the Array";
 		return (adr[i]);
 	}
 
+	//	T& Array<T>::get(uint index)
+	//		Returns the Element at the given Index
+	T& get(uint i){
+		if(i >= length)throw "Trying to Access Data outside the Array";
+		return (adr[i]);
+	}
+
 	//	Array<T> = (Array<T>& Original)
-	//		Copy Operator
+	//		Copy Assignment Operator
 	Array<T>& operator =(const Array<T>& original){
 		if(adr != nullptr)free(adr);
 		m_size = length = original.length;
 		adr = (T*)malloc(sizeof(T) * length);
-		memcpy(adr, original.data(), sizeof(T) * length);
+		memcpy(adr, original.adr, sizeof(T) * length);
 		return *this;
 	}
 
 	//	Array<T> = (Array<T>&& Original)
-	//		RValue Copy Operator
+	//		RValue Assignment Operator
 	Array<T>& operator =(Array<T>&& original){
 		if(adr != nullptr)free(adr);
-		adr = (T*)malloc(sizeof(T) * original.length);
-		memcpy(adr, original.data(), sizeof(T) * original.length);
-		m_size = length = original.length;
+		adr = original.adr;
+		original.adr = nullptr;
+		m_size = original.m_size;
+		length = original.length;
 		return *this;
 	}
 
@@ -181,9 +194,9 @@ public:
 		return *this;
 	}
 
-	//	Array<T> == Array<T>
+	//	Array<T> == const Array<T>&
 	//		Compares Two Arrays by comparing each individual Element.
-	bool operator ==(Array<T> other){
+	bool operator ==(const Array<T>& other){
 		if(length != other.length)return false;
 
 		for(int i = 0; i < other.length; ++i){
@@ -193,16 +206,16 @@ public:
 		return true;
 	}
 
-	//	Array<T> << Array<T>
+	//	Array<T> << const Array<T>&
 	//		Concatinates an array with another
-	Array<T>& operator <<(Array<T> other){
+	Array<T>& operator <<(const Array<T>& other){
 		push(other);
 		return *this;
 	}
 
-	//	Array<T> << T Element
+	//	Array<T> << cosnst T& Element
 	//		pushes an Element onto the end of the Array
-	Array<T>& operator <<(T element){
+	Array<T>& operator <<(const T& element){
 		push(element);
 		return *this;
 	}
@@ -226,6 +239,60 @@ public:
 		adr = nullptr;
 		m_size = 0;
 		length = 0;
+	}
+
+	//	Array<T>& Array<T>::fill(const T& value)
+	//		Fills the Array from start to End with the Value
+	Array<T>& fill(const T& value){
+		for(int i = 0; i < length; ++i){
+			adr[i] = value;
+		}
+		return *this;
+	}
+
+	//	Array<T>& Array<T>::fill(function() => T)
+	//		Fills the Array from start to End with the Results of the Function
+	Array<T>& fill(std::function<T()> func){
+		for(int i = 0; i < length; ++i){
+			adr[i] = func();
+		}
+		return *this;
+	}
+
+	//	Array<T>& Array<T>::fill(unsigned int startIndex, const T& value)
+	//		Fills the Array from the StartIndex to End with copies of the value 
+	Array<T>& fill(uint start, const T& value){
+		for(int i = start; i < length; ++i){
+			adr[i] = value;
+		}
+		return *this;
+	}
+
+	//	Array<T>& Array<T>::fill(unsigned int startIndex, function() => T)
+	//		Fills the Array from the StartIndex to End with the Results of the Function
+	Array<T>& fill(uint start, std::function<T()> func){
+		for(int i = start; i < length; ++i){
+			adr[i] = func();
+		}
+		return *this;
+	}
+
+	//	Array<T>& Array<T>::fill(unsigned int startIndex, unsigned int amount, const T& value)
+	//		Fills amount elements from startIndex with Copies of the value
+	Array<T>& fill(uint start, uint size, const T& value){
+		for(int i = start; i < start + size; ++i){
+			adr[i] = value;
+		}
+		return *this;
+	}
+
+	//	Array<T>& Array<T>::fill(unsigned int startIndex, unsigned int amount, function() => T)
+	//		Fills amount elements from startIndex with Copies of the value
+	Array<T>& fill(uint start, uint size, std::function<T()> func){
+		for(int i = start; i < start + size; ++i){
+			adr[i] = func();
+		}
+		return *this;
 	}
 
 	// Iterator Array<T>::begin()
@@ -390,11 +457,11 @@ public:
 		quickSort(0, length - 1);
 	}
 
-	//	void Array<T>::sort(function(T Element) => unsigned int)
+	//	void Array<T>::sort(function(T Element) => uint)
 	//		Sorts an Array using Counting sort. Very efficient but requires Unigned Int's to work.
-	void sort(std::function<unsigned int(T element)> getValue){
-		unsigned int largest = [this, &getValue]()->unsigned int{
-			unsigned int l = 0;
+	void sort(std::function<uint(T element)> getValue){
+		uint largest = [this, &getValue]()->uint{
+			uint l = 0;
 			for(T& e : *this){
 				l = getValue(e) > l ? getValue(e) : l;
 			}
@@ -403,20 +470,20 @@ public:
 
 		//
 		int size = 0;
-		for(unsigned int target = 1, result = 1; result > 0; target *= 10){
+		for(uint target = 1, result = 1; result > 0; target *= 10){
 			result = (int)(largest >= target);
 			size += result;
 		}
 
 		// Returns the number at a certain Digit. e.g: (52463, 3) would be 2 because 2 is the fourth character 
-		auto getDigit = [](unsigned int number, int digit){
+		auto getDigit = [](uint number, int digit){
 			unsigned long long int exp = pow(10, digit);
-			return (unsigned int)floor((number % (exp * 10)) / exp);
+			return (uint)floor((number % (exp * 10)) / exp);
 		};
 
 		//counting sort
 		auto count = [&](int digit)-> void{
-			unsigned int count[10] = {0,0,0,0,0,0,0,0,0,0};
+			uint count[10] = {0,0,0,0,0,0,0,0,0,0};
 			int i = 0;
 
 			for(; i < length; i++)
@@ -428,7 +495,7 @@ public:
 			auto result = copy();
 			for(i = length - 1; i >= 0; i--){
 				int countIndex = getDigit(getValue(adr[i]), digit);
-				unsigned int value = count[countIndex];
+				uint value = count[countIndex];
 				result[value - 1] = adr[i];
 				count[countIndex]--;
 			}
@@ -489,10 +556,10 @@ public:
 	//		Returns true if Element Exists in the Array.
 	//		WARNING: Uses A Binary search. Array Must be Sorted to Work.
 	bool find(T element){
-		unsigned int start = 0;
-		unsigned int end = length - 1;
+		uint start = 0;
+		uint end = length - 1;
 		while(start != end){
-			unsigned int mid = start + ((end - start) / 2);
+			uint mid = start + ((end - start) / 2);
 
 			if(element == adr[mid])return true;
 			if(element < adr[mid]){
@@ -506,9 +573,9 @@ public:
 	}
 
 
-	//	Array<T> Array<T>::concat(Array<T> Data)
+	//	Array<T> Array<T>::concat(const Array<T>& Data)
 	//		Concatinates Another Array onto the End
-	Array<T>& concat(Array<T> data) {
+	Array<T>& concat(const Array<T>& data) {
 		push(data);
 		return *this;
 	}
@@ -532,9 +599,9 @@ public:
 		length += (int)values.size();
 	}
 
-	//	void Array<T>::push(Array<T> Values)
+	//	void Array<T>::push(const Array<T>& Values)
 	//		adds another array onto the end. Does the same as .concat
-	void push(Array<T> values) {
+	void push(const Array<T>& values) {
 		increase(values.length);
 		memcpy(adr + (length), values.adr, sizeof(T) * values.length);
 		length += values.length;
@@ -558,9 +625,9 @@ public:
 		length += (int)values.size();
 	}
 
-	// void Array<T>::insert(int Index, Array<T> Values)
+	// void Array<T>::insert(int Index, const Array<T>& Values)
 	//		Inserts another Array into the Array at a certain Index
-	void insert(int index, Array<T> values) {
+	void insert(int index, const Array<T>& values) {
 		moveUp(index, values.length);
 		memcpy(adr + index, values.adr, sizeof(T) * values.length);
 		length += values.length;
@@ -584,9 +651,9 @@ public:
 		length += (int)values.size();
 	}
 
-	//	void Array<T>::unshift(Array<T> Values)
+	//	void Array<T>::unshift(const Array<T>& Values)
 	//		adds another Array onto the front of the Array
-	void unshift(Array<T> values) {
+	void unshift(const Array<T>& values) {
 		moveUp(0, values.length);
 		memcpy(adr, values.adr, sizeof(T) * values.length);
 		length += values.length;
@@ -630,7 +697,7 @@ public:
 
 template<typename T>
 std::ostream& operator<<(std::ostream& os, Array<T>& data) {
-	for (unsigned int i = 0; i < data.length;) {
+	for (uint i = 0; i < data.length;) {
 		T& e = data[i];
 		os << '[' << i++ << ']' << " -> " << e << std::endl;
 	}
