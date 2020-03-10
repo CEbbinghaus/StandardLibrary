@@ -50,6 +50,10 @@ public:
 		);
 	}
 
+	static float dot(const Vector3& a, const Vector3& b) {
+		return (a.x * b.x + a.y * b.y + a.z * b.z);
+	}
+
 
 	static Vector3 one() {
 		return Vector3(1.0f, 1.0f, 1.0f);
