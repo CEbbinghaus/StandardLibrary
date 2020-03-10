@@ -30,7 +30,7 @@ class Array{
 	T* adr;
 	int m_size;
 
-protected:
+private:
 	//Ensures there is always memory to write to. Allocates More memory if Nessecary
 	void increase(int amount = 1){
 		if((length + amount) > m_size){
