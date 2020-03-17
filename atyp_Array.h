@@ -175,7 +175,7 @@ public:
 
 	//	Array<T> = (Array<T>&& Original)
 	//		RValue Assignment Operator
-	Array<T>& operator =(Array<T>&& original){
+	Array<T>& operator =(Array<T>&& original) noexcept{
 		if(adr != nullptr)free(adr);
 		adr = original.adr;
 		original.adr = nullptr;
