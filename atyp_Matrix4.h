@@ -14,22 +14,6 @@
 
 class Matrix4
 {
-	void Set11(const float& val){ data[0]  = val; }
-	void Set12(const float& val){ data[4]  = val; }
-	void Set13(const float& val){ data[8]  = val; }
-	void Set14(const float& val){ data[12] = val; }
-	void Set21(const float& val){ data[1]  = val; }
-	void Set22(const float& val){ data[5]  = val; }
-	void Set23(const float& val){ data[9]  = val; }
-	void Set24(const float& val){ data[13] = val; }
-	void Set31(const float& val){ data[2]  = val; }
-	void Set32(const float& val){ data[6]  = val; }
-	void Set33(const float& val){ data[10] = val; }
-	void Set34(const float& val){ data[14] = val; }
-	void Set41(const float& val){ data[3]  = val; }
-	void Set42(const float& val){ data[7]  = val; }
-	void Set43(const float& val){ data[11] = val; }
-	void Set44(const float& val){ data[15] = val; }
 public:
 	union{
 		struct{
@@ -193,149 +177,133 @@ public:
 
 	static Matrix4 Invert(const Matrix4& v){
 		Matrix4 inverse;
-		inverse.Set11(
+		inverse.data[0] = 
 			v.data[5] * v.data[10] * v.data[15] -
 			v.data[5] * v.data[14] * v.data[11] -
 			v.data[6] * v.data[9] * v.data[15] +
 			v.data[6] * v.data[13] * v.data[11] +
 			v.data[7] * v.data[9] * v.data[14] -
-			v.data[7] * v.data[13] * v.data[10]
-		);
+			v.data[7] * v.data[13] * v.data[10];
 
-		inverse.Set21(
+		inverse.data[1] = 
 			-v.data[1] * v.data[10] * v.data[15] +
 			v.data[1] * v.data[14] * v.data[11] +
 			v.data[2] * v.data[9] * v.data[15] -
 			v.data[2] * v.data[13] * v.data[11] -
 			v.data[3] * v.data[9] * v.data[14] +
-			v.data[3] * v.data[13] * v.data[10]
-		);
+			v.data[3] * v.data[13] * v.data[10];
 
-		inverse.Set31(
+		inverse.data[2] = 
 			v.data[1] * v.data[6] * v.data[15] -
 			v.data[1] * v.data[14] * v.data[7] -
 			v.data[2] * v.data[5] * v.data[15] +
 			v.data[2] * v.data[13] * v.data[7] +
 			v.data[3] * v.data[5] * v.data[14] -
-			v.data[3] * v.data[13] * v.data[6]
-		);
+			v.data[3] * v.data[13] * v.data[6];
 
-		inverse.Set41(
+		inverse.data[3] = 
 			-v.data[1] * v.data[6] * v.data[11] 
 			+v.data[1] * v.data[10] * v.data[7]
 			+v.data[2] * v.data[5] * v.data[11]
 			-v.data[2] * v.data[9] * v.data[7]
 			-v.data[3] * v.data[5] * v.data[10]
-			+v.data[3] * v.data[9] * v.data[6]
-		);
+			+v.data[3] * v.data[9] * v.data[6];
 
-		inverse.Set12(
+		inverse.data[4] = 
 			-v.data[4] * v.data[10] * v.data[15] +
 			v.data[4] * v.data[14] * v.data[11] +
 			v.data[6] * v.data[8] * v.data[15] -
 			v.data[6] * v.data[12] * v.data[11] -
 			v.data[7] * v.data[8] * v.data[14] +
-			v.data[7] * v.data[12] * v.data[10]
-		);
+			v.data[7] * v.data[12] * v.data[10];
 
-		inverse.Set22(
+		inverse.data[5] = 
 			v.data[0] * v.data[10] * v.data[15] -
 			v.data[0] * v.data[14] * v.data[11] -
 			v.data[2] * v.data[8] * v.data[15] +
 			v.data[2] * v.data[12] * v.data[11] +
 			v.data[3] * v.data[8] * v.data[14] -
-			v.data[3] * v.data[12] * v.data[10]
-		);
+			v.data[3] * v.data[12] * v.data[10];
 
-		inverse.Set32(
+		inverse.data[6] = 
 			-v.data[0] * v.data[6] * v.data[15] +
 			v.data[0] * v.data[14] * v.data[7] +
 			v.data[2] * v.data[4] * v.data[15] -
 			v.data[2] * v.data[12] * v.data[7] -
 			v.data[3] * v.data[4] * v.data[14] +
-			v.data[3] * v.data[12] * v.data[6]
-		);
+			v.data[3] * v.data[12] * v.data[6];
 
-		inverse.Set42(
+		inverse.data[7] = 
 			v.data[0] * v.data[6] * v.data[11] -
 			v.data[0] * v.data[10] * v.data[7] -
 			v.data[2] * v.data[4] * v.data[11] +
 			v.data[2] * v.data[8] * v.data[7] +
 			v.data[3] * v.data[4] * v.data[10] -
-			v.data[3] * v.data[8] * v.data[6]
-		);
+			v.data[3] * v.data[8] * v.data[6];
 
-		inverse.Set13(
+		inverse.data[8] = 
 			v.data[4] * v.data[9] * v.data[15] -
 			v.data[4] * v.data[13] * v.data[11] -
 			v.data[5] * v.data[8] * v.data[15] +
 			v.data[5] * v.data[12] * v.data[11] +
 			v.data[7] * v.data[8] * v.data[13] -
-			v.data[7] * v.data[12] * v.data[9]
-		);
+			v.data[7] * v.data[12] * v.data[9];
 
-		inverse.Set23(
+		inverse.data[9] = 
 			-v.data[0] * v.data[9] * v.data[15] +
 			v.data[0] * v.data[13] * v.data[11] +
 			v.data[1] * v.data[8] * v.data[15] -
 			v.data[1] * v.data[12] * v.data[11] -
 			v.data[3] * v.data[8] * v.data[13] +
-			v.data[3] * v.data[12] * v.data[9]
-		);
+			v.data[3] * v.data[12] * v.data[9];
 
-		inverse.Set33(
+		inverse.data[10] = 
 			v.data[0] * v.data[5] * v.data[15] -
 			v.data[0] * v.data[13] * v.data[7] -
 			v.data[1] * v.data[4] * v.data[15] +
 			v.data[1] * v.data[12] * v.data[7] +
 			v.data[3] * v.data[4] * v.data[13] -
-			v.data[3] * v.data[12] * v.data[5]
-		);
+			v.data[3] * v.data[12] * v.data[5];
 
-		inverse.Set43(
+		inverse.data[11] = 
 			-v.data[0] * v.data[5] * v.data[11] +
 			v.data[0] * v.data[9] * v.data[7] +
 			v.data[1] * v.data[4] * v.data[11] -
 			v.data[1] * v.data[8] * v.data[7] -
 			v.data[3] * v.data[4] * v.data[9] +
-			v.data[3] * v.data[8] * v.data[5]
-		);
+			v.data[3] * v.data[8] * v.data[5];
 
-		inverse.Set14(
+		inverse.data[12] = 
 			-v.data[4] * v.data[9] * v.data[14] +
 			v.data[4] * v.data[13] * v.data[10] +
 			v.data[5] * v.data[8] * v.data[14] -
 			v.data[5] * v.data[12] * v.data[10] -
 			v.data[6] * v.data[8] * v.data[13] +
-			v.data[6] * v.data[12] * v.data[9]
-		);
+			v.data[6] * v.data[12] * v.data[9];
 
-		inverse.Set24(
+		inverse.data[13] = 
 			v.data[0] * v.data[9] * v.data[14] -
 			v.data[0] * v.data[13] * v.data[10] -
 			v.data[1] * v.data[8] * v.data[14] +
 			v.data[1] * v.data[12] * v.data[10] +
 			v.data[2] * v.data[8] * v.data[13] -
-			v.data[2] * v.data[12] * v.data[9]
-		);
+			v.data[2] * v.data[12] * v.data[9];
 
-		inverse.Set34(
+		inverse.data[14] = 
 			-v.data[0] * v.data[5] * v.data[14] +
 			v.data[0] * v.data[13] * v.data[6] +
 			v.data[1] * v.data[4] * v.data[14] -
 			v.data[1] * v.data[12] * v.data[6] -
 			v.data[2] * v.data[4] * v.data[13] +
-			v.data[2] * v.data[12] * v.data[5]
-		);
+			v.data[2] * v.data[12] * v.data[5];
 
-		inverse.Set44(
+		inverse.data[15] = 
 			v.data[0] * v.data[5] * v.data[10] -
 			v.data[0] * v.data[9] * v.data[6] -
 			v.data[1] * v.data[4] * v.data[10] +
 			v.data[1] * v.data[8] * v.data[6] +
 			v.data[2] * v.data[4] * v.data[9] -
-			v.data[2] * v.data[8] * v.data[5]
-		);
+			v.data[2] * v.data[8] * v.data[5];
 
 		float determinant =
 			v.data[0] * inverse.data[0] + v.data[4] * inverse.data[1] + v.data[8] * inverse.data[2] + v.data[12] * inverse.data[3];
