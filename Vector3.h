@@ -1,6 +1,6 @@
 #pragma once
 #include <memory>
-#include "atyp_Vector2.h"
+#include "Vector2.h"
 
 class Quaternion;
 

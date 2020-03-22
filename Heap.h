@@ -1,6 +1,6 @@
 #pragma once
 #include <functional>
-#include "atyp_Array.h"
+#include "Array.h"
 
 namespace atyp
 {

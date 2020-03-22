@@ -1,6 +1,6 @@
 #pragma once
-#include "atyp_Vector2.h"
-#include "atyp_Vector4.h"
+#include "Vector2.h"
+#include "Vector4.h"
 #include <memory>
 
 class Vector4

@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
-#include "atyp_Vector3.h"
-#include "atyp_Matrix4.h"
+#include "Vector3.h"
+#include "Matrix4.h"
 
 class Quaternion
 {

@@ -1,6 +1,6 @@
 #pragma once
-#include "atyp_Vector3.h"
-#include "atyp_Vector2.h"
+#include "Vector3.h"
+#include "Vector2.h"
 #include <memory>
 
 /*
