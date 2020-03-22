@@ -21,7 +21,7 @@ public:
 			Vector4 YAxis;
 			Vector4 ZAxis;
 			Vector4 Pos;
-		};
+		} col;
 		float data[4 * 4];
 	};
 

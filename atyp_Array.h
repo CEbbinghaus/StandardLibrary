@@ -1,6 +1,7 @@
 #pragma once
 
 #include<iostream>
+#include <cmath>
 #include <functional>
 #include <cstdarg>
 #include "atyp_Assert.h"
@@ -475,7 +476,7 @@ public:
 			size += result;
 		}
 
-		// Returns the number at a certain Digit. e.g: (52463, 3) would be 2 because 2 is the fourth character 
+		// Returns the number at a certain Digit. e.g: (52463, 3) would be 2 because 2 is the 1<<3 character 
 		auto getDigit = [](uint number, int digit){
 			unsigned long long int exp = pow(10, digit);
 			return (uint)floor((number % (exp * 10)) / exp);

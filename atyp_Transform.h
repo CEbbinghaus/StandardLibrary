@@ -87,15 +87,15 @@ public:
 	}
 
 	Vector3 right() {
-		return -globalMatrix.XAxis.normalise();
+		return -globalMatrix.col.XAxis.normalise();
 	}
 
 	Vector3 up() {
-		return -globalMatrix.YAxis.normalise();
+		return -globalMatrix.col.YAxis.normalise();
 	}
 
 	Vector3 forward() {
-		return -globalMatrix.ZAxis.normalise();
+		return -globalMatrix.col.ZAxis.normalise();
 	}
 
 	operator Matrix4(){
