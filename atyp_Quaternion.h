@@ -79,15 +79,15 @@ public:
 	static Quaternion aroundAngle(Vector3 axis, float angle)
 	{
 		// Here we calculate the sin( theta / 2) once for optimization
-		double factor = sinf((float)angle / 2.0f);
+		float factor = sinf((float)angle / 2.0f);
 
 		// Calculate the x, y and z of the quaternion
-		double x = axis.x * factor;
-		double y = axis.y * factor;
-		double z = axis.z * factor;
+		float x = axis.x * factor;
+		float y = axis.y * factor;
+		float z = axis.z * factor;
 
 		// Calcualte the w value by cos( theta / 2 )
-		double w = cosf((float)angle / 2.0f);
+		float w = cosf((float)angle / 2.0f);
 
 		return Quaternion(x, y, z, w).normalized();
 

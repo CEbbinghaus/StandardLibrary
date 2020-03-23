@@ -30,11 +30,11 @@ using uint = unsigned int;
 template <typename T>
 class Array{
 	T* adr;
-	int m_size;
+	uint m_size;
 
 private:
 	//Ensures there is always memory to write to. Allocates More memory if Nessecary
-	void increase(int amount = 1){
+	void increase(uint amount = 1){
 		if((length + amount) > m_size){
 			m_size = (m_size + amount) * 2;
 			T* tmp = (T*)malloc(sizeof(T) * m_size);
@@ -58,7 +58,7 @@ private:
 	}
 
 	//Shifts all Elements down to compress the array
-	void moveDown(int begin, int amount = 1){
+	void moveDown(uint begin, uint amount = 1){
 		//assert(begin >= 0 && length >= 1);
 		if(length >= 1 && begin + amount < length)
 			memcpy(adr + begin, adr + begin + amount, sizeof(T) * (length - (begin + amount)));
@@ -244,7 +244,7 @@ public:
 	//	Array<T>& Array<T>::fill(const T& value)
 	//		Fills the Array from start to End with the Value
 	Array<T>& fill(const T& value){
-		for(int i = 0; i < length; ++i){
+		for(uint i = 0; i < length; ++i){
 			adr[i] = value;
 		}
 		return *this;
@@ -339,7 +339,7 @@ public:
 	//	Array<T> Array<T>::forEach(function(const T& Element) => void)
 	//		loops over every Element of the Array and calls a function on that element
 	void forEach(std::function<void(T& element)> func) {
-		for (int i = 0; i < length; i++) {
+		for (uint i = 0; i < length; i++) {
 			func(adr[i]);
 		}
 	}
@@ -368,7 +368,7 @@ public:
 	template<typename nT>
 	Array<nT> map(std::function<nT(const T & element)> func) {
 		Array<nT> res(length);
-		for (int i = 0; i < length; i++) {
+		for (uint i = 0; i < length; i++) {
 			res[i] = func(adr[i]);
 		}
 		return res;
@@ -404,7 +404,7 @@ public:
 	//	void Array<T>::remove(T Element)
 	//		Removes every Element Matching the Argument
 	void remove(T element){
-		for(int i = 0; i < length; i++){
+		for(uint i = 0; i < length; i++){
 			if(adr[i] == element){
 				moveDown(i);
 			}
@@ -546,7 +546,7 @@ public:
 	// int Array<T>::indexOf(T Element)
 	//		Returns the Index of a Element in the Array. if it couldnt find one will return -1
 	int indexOf(T element){
-		for(int i = 0; i < length; i++){
+		for(uint i = 0; i < length; i++){
 			if(adr[i] == element)return i;
 		}
 		return -1;

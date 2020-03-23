@@ -89,7 +89,6 @@ public:
 		);
 	}
 
-
 	Vector4& operator[](int index) {
 		return *((Vector4*)(data + (index * 4)));
 	}
@@ -171,6 +170,17 @@ public:
 		m.data[10] = (far_p + near_p) * nf;
 		m.data[11] = -1.0f;
 		m.data[14] = 2.0f * far_p * near_p * nf;
+
+		return m;
+	}
+
+	static Matrix4 Orthographic(float height, float width, float near_p, float far_p){
+		Matrix4 m = Matrix4(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+		m.data[0] = 2 / width;
+		m.data[5] = 2 / height;
+		m.data[10] = -2 / (far_p - near_p);
+		m.data[14] = -((far_p + near_p) / (far_p - near_p));
+		m.data[15] = 1;
 
 		return m;
 	}
