@@ -179,6 +179,8 @@ public:
 		m.data[0] = 2 / width;
 		m.data[5] = 2 / height;
 		m.data[10] = -2 / (far_p - near_p);
+		m.data[12] = -1;
+		m.data[13] = -1;
 		m.data[14] = -((far_p + near_p) / (far_p - near_p));
 		m.data[15] = 1;
 

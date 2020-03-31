@@ -55,7 +55,9 @@ class String {
         char* buffer = (char*)malloc(needed);
         vsprintf(buffer, base, argptr);
         va_end(argptr);
-        return String(buffer);
+        String result = String(buffer);
+        free(buffer);
+        return result;
     }
 
     static int LevinSteinDistance(const String& a, const String& b) {
