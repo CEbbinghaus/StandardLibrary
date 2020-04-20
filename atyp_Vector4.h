@@ -90,6 +90,7 @@ public:
 
 	Vector4& normalise() {
 		float mod = magnitude();
+		if(mod == 0.0)return *this;
 		x /= mod;
 		y /= mod;
 		z /= mod;

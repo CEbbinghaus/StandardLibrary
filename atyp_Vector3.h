@@ -113,6 +113,7 @@ public:
 
 	Vector3& normalise() {
 		float mag = magnitude();
+		if(mag == 0.0)return *this;
 		x /= mag;
 		y /= mag;
 		z /= mag;

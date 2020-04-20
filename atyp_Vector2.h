@@ -75,9 +75,7 @@ public:
 
 	Vector2& normalise() {
 		float mag = magnitude();
-		if(mag == 0.0f)
-			throw "Cannot Divide by 0";
-		//assert(mag != 0.0f && "Magnitude is 0. Cannot Divide");
+		if(mag == 0.0f)return *this;
 		x /= mag;
 		y /= mag;
 		return *this;
