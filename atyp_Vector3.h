@@ -54,6 +54,17 @@ public:
 		return (a.x * b.x + a.y * b.y + a.z * b.z);
 	}
 
+	static Vector3 clamp(const Vector3& value, const Vector3& min, const Vector3& max){
+		Vector3 result;
+		result.x = (value.x < min.x ? min.x : (value.x > max.x ? max.x : value.x));
+		result.y = (value.y < min.y ? min.y : (value.y > max.y ? max.y : value.y));
+		result.z = (value.z < min.z ? min.z : (value.z > max.z ? max.z : value.z));
+		return result;
+	}
+
+	static Vector3 Abs(const Vector3& value){
+		return Vector3(abs(value.x), abs(value.y), abs(value.z));
+	}
 
 	static Vector3 one() {
 		return Vector3(1.0f, 1.0f, 1.0f);

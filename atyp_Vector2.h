@@ -36,6 +36,17 @@ public:
 		return (a.x * b.x + a.y * b.y);
 	}
 
+	static Vector2 clamp(const Vector2& value, const Vector2& min, const Vector2& max){
+		Vector2 result;
+		result.x = (value.x < min.x ? min.x : (value.x > max.x ? max.x : value.x));
+		result.y = (value.y < min.y ? min.y : (value.y > max.y ? max.y : value.y));
+		return result;
+	}
+
+	static Vector2 Abs(const Vector2& value){
+		return Vector2(abs(value.x), abs(value.y));
+	}
+
 	Vector2() {
 		data[0] = data[1] = 0;
 	}

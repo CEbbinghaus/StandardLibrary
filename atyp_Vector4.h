@@ -45,6 +45,19 @@ public:
 		return (a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w);
 	}
 
+	static Vector4 clamp(const Vector4& value, const Vector4& min, const Vector4& max){
+		Vector4 result;
+		result.x = (value.x < min.x ? min.x : (value.x > max.x ? max.x : value.x));
+		result.y = (value.y < min.y ? min.y : (value.y > max.y ? max.y : value.y));
+		result.z = (value.z < min.z ? min.z : (value.z > max.z ? max.z : value.z));
+		result.w = (value.w < min.w ? min.w : (value.w > max.w ? max.w : value.w));
+		return result;
+	}
+
+	static Vector4 Abs(const Vector4& value){
+		return Vector4(abs(value.x), abs(value.y), abs(value.z), abs(value.w));
+	}
+
 	Vector4() {
 		x = y = z = w = 0;
 	}
