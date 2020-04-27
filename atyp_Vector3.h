@@ -94,7 +94,7 @@ public:
 		x = y = z = s;
 	}
 	
-	Vector3(Vector2 v, float s) {
+	Vector3(const Vector2& v, float s) {
 		x = v.x;
 		y = v.y;
 		z = s;
@@ -109,16 +109,18 @@ public:
 		y = a_y;
 		z = a_z;
 	}
-
-	void Print(){
+  
+  #ifdef _CSTDIO_
+	void Print() const{
 		printf("%.2f, %.2f, %.2f\n", x, y, z);
 	}
+  #endif
 
-	float magnitude() {
+	float magnitude() const {
 		return sqrtf(x * x + y * y + z * z);
 	}
 
-	float magnitudeSqr() {
+	float magnitudeSqr() const {
 		return x * x + y * y + z * z;
 	}
 
@@ -131,7 +133,13 @@ public:
 		return *this;
 	}
 
-	float dot(const Vector3& rhs) {
+	Vector3 normalised() const {
+		float mag = magnitude();
+		if(mag == 0.0)return *this;
+		return Vector3(x / mag, y / mag, z / mag);
+	}
+
+	float dot(const Vector3& rhs) const {
 		return (x * rhs.x + y * rhs.y + z * rhs.z);
 	}
 
@@ -139,27 +147,27 @@ public:
 		return Vector3(x, y, z);
 	}
 
-	Vector3 operator+(const Vector3& rhs) {
+	Vector3 operator+(const Vector3& rhs) const {
 		return Vector3(x + rhs.x, y + rhs.y, z + rhs.z);
 	}
 
-	Vector3 operator-(const Vector3& rhs) {
+	Vector3 operator-(const Vector3& rhs) const {
 		return Vector3(x - rhs.x, y - rhs.y, z - rhs.z);
 	}
 
-	Vector3 operator*(float rhs) {
+	Vector3 operator*(float rhs) const {
 		return Vector3(x * rhs, y * rhs, z * rhs);
 	}
 	
-	Vector3 operator*(Vector3 rhs) {
+	Vector3 operator*(Vector3 rhs) const {
 		return Vector3(x * rhs.x, y * rhs.y, z * rhs.z);
 	}
 
-	Vector3 operator/(float rhs) {
+	Vector3 operator/(float rhs) const {
 		return Vector3(x / rhs, y / rhs, z / rhs);
 	}
 	
-	Vector3 operator/(Vector3 rhs) {
+	Vector3 operator/(Vector3 rhs) const {
 		return Vector3(x / rhs.x, y / rhs.y, z / rhs.z);
 	}
 
@@ -185,7 +193,7 @@ public:
 		return *this;
 	}
 
-	Vector3& operator*=(Vector3 rhs) {
+	Vector3& operator*=(const Vector3& rhs) {
 		x *= rhs.x;
 		y *= rhs.y;
 		z *= rhs.z;
@@ -199,34 +207,34 @@ public:
 		return *this;
 	}
 
-	Vector3& operator/=(Vector3 rhs) {
+	Vector3& operator/=(const Vector3& rhs){
 		x /= rhs.x;
 		y /= rhs.y;
 		z /= rhs.z;
 		return *this;
 	}
 
-	bool operator==(const Vector3& b) {
-		bool xEquality = x == b.x;
-		bool yEquality = y == b.y;
-		bool zEquality = z == b.z;
-
-		return (xEquality && yEquality && zEquality);
+	bool operator==(const Vector3& rhs) const {
+		return x == rhs.x && y == rhs.y && z == rhs.z;
+	}
+	
+	bool operator!=(const Vector3& rhs) const {
+		return !(*this == rhs);
 	}
 
-	float& operator[](int index) {
+	float& operator[](int index) const {
 		return *((float*)this + index);
 	}
 
-	operator float* () {
+	operator float* () const {
 		return (float*)this;
 	}
 
-	operator Vector2() {
+	operator Vector2() const {
 		return Vector2(x, y);
 	}
 
-	Vector3 cross(const Vector3& other){
+	Vector3 cross(const Vector3& other) const {
 		return Vector3(
 			y * other.z - z * other.y,
 			z * other.x - x * other.z,
@@ -234,11 +242,8 @@ public:
 		);
 	}
 
-	Vector3& operator-(){
-		x = -x;
-		y = -y;
-		z = -z;
-		return *this;
+	Vector3 operator-() const{
+		return Vector3(-x, -y, -z);
 	}
 };
 

@@ -30,7 +30,7 @@ public:
 	}
 
 	static Vector4 right() {
-		return Vector4(1, 0.0, 0.0, 0.0f);
+		return Vector4(1.0f, 0.0, 0.0, 0.0f);
 	}
 
 	static Vector4 up() {
@@ -38,7 +38,7 @@ public:
 	}
 
 	static Vector4 forward() {
-		return Vector4(0.0, 0.0, 1, 0.0f);
+		return Vector4(0.0, 0.0, 1.0f, 0.0f);
 	}
 
 	static float dot(const Vector4& a, const Vector4& b) {
@@ -62,7 +62,7 @@ public:
 		x = y = z = w = 0;
 	}
 
-	Vector4(Vector2 v, float z, float w) {
+	Vector4(const Vector2& v, float z, float w) {
 		x = v.x;
 		y = v.y;
 		
@@ -70,7 +70,7 @@ public:
 		this->w = w;
 	}
 
-	Vector4(Vector4 v, float w) {
+	Vector4(const Vector3& v, float w) {
 		x = v.x;
 		y = v.y;
 		z = v.z;
@@ -85,19 +85,21 @@ public:
 		w = a_w;
 	}
 
-	void Print(){
+  #ifdef _CSTDIO_
+	void Print() const{
 		printf("%.2f, %.2f, %.2f, %.2f\n", x, y, z, w);
 	}
+  #endif
 
 	Vector4 copy() const {
 		return Vector4(x, y, z, w);
 	}
 
-	float magnitude() {
+	float magnitude() const {
 		return sqrtf(x * x + y * y + z * z + w + w);
 	}
 
-	float magnitudeSqr() {
+	float magnitudeSqr() const {
 		return x * x + y * y + z * z + w + w;
 	}
 
@@ -111,23 +113,29 @@ public:
 		return *this;
 	}
 
-	float dot(const Vector4& rhs) {
+	Vector4 normalise() const {
+		float mod = magnitude();
+		if(mod == 0.0)return *this;
+		return Vector4(x / mod, y / mod, z / mod, w / mod);
+	}
+
+	float dot(const Vector4& rhs) const {
 		return x * rhs.x + y * rhs.y + z * rhs.z + w * rhs.w;
 	}
 
-	Vector4 operator+(const Vector4& rhs) {
+	Vector4 operator+(const Vector4& rhs) const {
 		return Vector4(x + rhs.x, y + rhs.y, z + rhs.z, w + rhs.w);
 	}
 
-	Vector4 operator-(const Vector4& rhs) {
+	Vector4 operator-(const Vector4& rhs) const {
 		return Vector4(x - rhs.x, y - rhs.y, z - rhs.z, w - rhs.w);
 	}
 
-	Vector4 operator*(float rhs) {
+	Vector4 operator*(float rhs) const {
 		return Vector4(x * rhs, y * rhs, z * rhs, w * rhs);
 	}
 
-	Vector4 operator/(float rhs) {
+	Vector4 operator/(float rhs) const {
 		return Vector4(x / rhs, y / rhs, z / rhs, w / rhs);
 	}
 
@@ -164,35 +172,39 @@ public:
 		return *this;
 	}
 
-	float& operator[](int index) {
+	bool operator==(const Vector4& rhs) const{
+		return x == rhs.x && y == rhs.y && z == rhs.z && w == rhs.w;
+	}
+	
+	bool operator!=(const Vector4& rhs) const{
+		return !(*this == rhs);
+	}
+
+	float& operator[](int index) const {
 		return *((float*)this + index);
 	}
 
-	operator float* () {
+	operator float* () const {
 		return (float*)this;
 	}
 	
-	operator Vector3() {
+	operator Vector3() const {
 		return Vector3(x, y, z);
 	}
 	
-	operator Vector2() {
+	operator Vector2() const {
 		return Vector2(x, y);
 	}
 
-	Vector4 cross(const Vector4& rhs) {
+	Vector4 cross(const Vector4& rhs) const {
 		Vector4 result(*this);
 		*((Vector4*)& result) = (*((Vector4*)& result)).cross(*((Vector4*)& rhs));
 		result.w = 0;
 		return  result;
 	}
 
-	Vector4& operator-() {
-		x = -x;
-		y = -y;
-		z = -z;
-		w = -w;
-		return *this;
+	Vector4& operator-() const {
+		return Vector4(-x, -y, -z, -w);
 	}
 };
 

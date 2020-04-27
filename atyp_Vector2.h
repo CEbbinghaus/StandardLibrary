@@ -1,6 +1,5 @@
 #pragma once
 #include <cmath>
-#include <cstdio>
 
 class Vector2{
 public:
@@ -60,27 +59,27 @@ public:
 		y = a_y;
 	}
 
-#ifdef _CSTDIO_
+  #ifdef _CSTDIO_
 
-	void Print(){
+	void Print() const {
 		printf("%.2f, %.2f\n", x, y);
 	}
 
-#endif // _CSTDIO_
+  #endif // _CSTDIO_
 
 	Vector2 copy() const {
 		return Vector2(x, y);
 	}
 
-	Vector2 inverse(){
+	Vector2 inverse() const {
 		return Vector2(-x, -y);
 	}
 
-	float magnitude() {
+	float magnitude() const {
 		return sqrtf(x * x + y * y);
 	}
 
-	float magnitudeSqr() {
+	float magnitudeSqr() const {
 		return x * x + y * y;
 	}
 
@@ -91,24 +90,30 @@ public:
 		y /= mag;
 		return *this;
 	}
+	
+	Vector2 normalised() const {
+		float mag = magnitude();
+		if(mag == 0.0f)return *this;
+		return Vector2(x / mag, y / mag);
+	}
 
-	float dot(const Vector2& rhs) {
+	float dot(const Vector2& rhs) const {
 		return x * rhs.x + y * rhs.y;
 	}
 
-	Vector2 operator+(const Vector2& rhs) {
+	Vector2 operator+(const Vector2& rhs) const {
 		return Vector2(x + rhs.x, y + rhs.y);
 	}
 
-	Vector2 operator-(const Vector2& rhs) {
+	Vector2 operator-(const Vector2& rhs) const {
 		return Vector2(x - rhs.x, y - rhs.y);
 	}
 
-	Vector2 operator*(float rhs) {
+	Vector2 operator*(float rhs) const {
 		return Vector2(x * rhs, y * rhs);
 	}
 
-	Vector2 operator/(float rhs) {
+	Vector2 operator/(float rhs) const {
 		return Vector2(x / rhs, y / rhs);
 	}
 
@@ -129,6 +134,11 @@ public:
 		y *= rhs;
 		return *this;
 	}
+	Vector2& operator*=(const Vector2& rhs) {
+		x *= rhs.x;
+		y *= rhs.y;
+		return *this;
+	}
 
 	Vector2& operator/=(float rhs) {
 		x /= rhs;
@@ -136,11 +146,29 @@ public:
 		return *this;
 	}
 
-	float& operator[](int index) {
+	Vector2& operator/=(const Vector2& rhs) {
+		x /= rhs.x;
+		y /= rhs.y;
+		return *this;
+	}
+
+	bool operator==(const Vector2& rhs) const {
+		return x == rhs.x && y == rhs.y;
+	}
+	
+	bool operator!=(const Vector2& rhs) const {
+		return !(*this == rhs);
+	}
+
+	Vector2 operator-() const {
+		return Vector2(-x, -y);
+	}
+
+	float& operator[](int index) const {
 		return *((float*)this + index);
 	}
 
-	operator float* () {
+	operator float* () const {
 		return (float*)this;
 	}
 };
