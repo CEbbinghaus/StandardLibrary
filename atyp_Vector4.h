@@ -203,7 +203,7 @@ public:
 		return  result;
 	}
 
-	Vector4& operator-() const {
+	Vector4 operator-() const {
 		return Vector4(-x, -y, -z, -w);
 	}
 };
